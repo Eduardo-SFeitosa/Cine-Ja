@@ -5,15 +5,15 @@ const app = express();
 
 const database = require("./models")
 
-app.get("/filmes", (request, response) => {
-    response.json({"filmes" : ["indiana jones", "missão impossivel", "os incriveis"]})
-});
-
-app.get("/assentos", (request, response) => {
-    response.json({"fileiras" : ["2", "3", "4"]})
-});
+const filmes_rout = require("./routes/filmes")
 
 
+app.use("/filmes", filmes_rout);
+
+
+
+
+//inicializa a base de dados mysql quando o servidor começa o listen
 database.sequelize.sync().then(() => {
 
     app.listen(process.env.port || 5000, () => {

@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull : false
         },
         lancamento : {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull : false
         }
     })
