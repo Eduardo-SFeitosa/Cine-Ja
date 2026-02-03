@@ -10,17 +10,23 @@ function App() {
 
   useEffect(() => {
 
+    {/* Se comunica com a api e tenta receber os filmes disponiveis */}
+
     fetch("/api/filmes")
+
       .then(res => res.json())
+
       .then(data => {
         setFilmes(Array.isArray(data) ? data : [])
         setCarregando(false)
       })
+
       .catch(() => setCarregando(false))
   }, [])
 
   return (
     <div className="tela-inicial">
+
       <header className="cabecalho">
         <h1>Cine Já</h1>
       </header>
@@ -29,9 +35,13 @@ function App() {
         {carregando ? (
           <p className="mensagem">Carregando filmes...</p>
         ) : filmes.length === 0 ? (
-          <p className="mensagem">Nenhum filme em cartaz.</p>
+          <p className="mensagem">Nenhum filme encontrado.</p>
         ) : (
+
           <section className="lista-filmes">
+
+            {/* Cria uma miniatura para cada filme que a api responder */}
+
             {filmes.map((filme) => (
               <Miniatura
                 key={filme.id}
@@ -42,6 +52,7 @@ function App() {
                 faixaEtaria={filme.classificacao}
               />
             ))}
+
           </section>
         )}
       </main>
