@@ -1,26 +1,30 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 
 const app = express();
 
-const database = require("./models")
+const database = require('./models');
 
-const filmes_rout = require("./routes/filmes")
+const filmes_rout = require('./routes/filmes');
+const assentos_rout = require('./routes/assentos');
 
+app.use(cors());
+app.use(express.json());
 
 //Quando receber /filmes utiliza o codigo do routes/filmes
-app.use("/filmes", filmes_rout);
+app.use('/filmes', filmes_rout);
 
+//rotas relacionadas a assentos e sessões
+app.use('/', assentos_rout);
 
 //inicializa a base de dados mysql quando o servidor começa o listen
-database.sequelize.sync().then(() => {
+database.sequelize.sync({ alter: true }).then(() => {
 
+  //cria o servidor no localhost://5000
 
-    //cria o servidor no localhost://5000
-    app.listen(process.env.port || 5000, () => {
-        console.log("servidor está funcionando")
-    });
+  app.listen(process.env.port || 5000, () => {
 
+    console.log('servidor está funcionando');
+    
+  });
 });
-
-

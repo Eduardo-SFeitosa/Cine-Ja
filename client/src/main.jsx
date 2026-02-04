@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 
 import './index.css'
 
-import App from './App.jsx'
+import Pagina_inicio from './pagina_inicio.jsx'
 
 import Pagina_filmes from './components/pagina_filmes.jsx'
 
@@ -14,7 +14,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom"
 const rotas = createBrowserRouter([
 
   //pagina principal do site
-  {path:"/", element: < App/>},
+  {path:"/", element: < Pagina_inicio/>},
 
 
   //pagina especifica de filme

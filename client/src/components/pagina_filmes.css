@@ -1,0 +1,146 @@
+/* layout geral da página de filme */
+.pagina-filme {
+    min-height: 100vh;
+    padding: 24px;
+    background: radial-gradient(circle at top, #101322 0, #05060a 60%);
+    color: #f4f4f4;
+    box-sizing: border-box;
+}
+
+.pagina-filme__cabecalho {
+    max-width: 1080px;
+    margin: 0 auto 24px auto;
+}
+
+.pagina-filme__titulo {
+    font-size: 2.4rem;
+    margin-bottom: 8px;
+}
+
+.pagina-filme__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: #c7c9d3;
+}
+
+.pagina-filme__faixa-etaria {
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #2d3b55;
+}
+
+.pagina-filme__duracao,
+.pagina-filme__genero {
+    opacity: 0.9;
+}
+
+.pagina-filme__conteudo {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr);
+    gap: 32px;
+}
+
+.pagina-filme__principal {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 24px;
+}
+
+.pagina-filme__poster-wrapper {
+    max-width: 280px;
+}
+
+.pagina-filme__poster {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+    object-fit: cover;
+}
+
+.pagina-filme__info p {
+    margin: 6px 0;
+}
+
+.pagina-filme__descricao {
+    margin-top: 16px;
+    line-height: 1.5;
+}
+
+.pagina-filme__sessoes {
+    margin-top: 24px;
+}
+
+.pagina-filme__sessoes h2 {
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+}
+
+.pagina-filme__lista-cinemas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pagina-filme__cinema {
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(10, 14, 28, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.pagina-filme__cinema-nome {
+    margin: 0 0 8px 0;
+    font-size: 1.05rem;
+}
+
+.pagina-filme__horarios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pagina-filme__horario-botao {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    background: #e7b341;
+    color: #101322;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+
+.pagina-filme__horario-botao:hover {
+    background: #f3c75e;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    transform: translateY(-1px);
+}
+
+.pagina-filme--estado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .pagina-filme {
+        padding: 16px;
+    }
+
+    .pagina-filme__principal {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .pagina-filme__poster-wrapper {
+        max-width: 220px;
+        margin: 0 auto;
+    }
+}

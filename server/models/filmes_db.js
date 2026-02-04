@@ -37,8 +37,23 @@ module.exports = (sequelize, DataTypes) => {
         lancamento : {
             type: DataTypes.DATEONLY,
             allowNull : false
+        },
+        ativo : {
+            type: DataTypes.BOOLEAN,
+            allowNull : false
         }
+        
+
     })
+
+    Filmes.associate = (models) => {
+        Filmes.hasMany(models.sessoes_disponiveis, {
+            foreignKey: 'filme_id',
+            as: 'sessoes_disponiveis'
+        })
+    }
+
+    
 
     return Filmes
 

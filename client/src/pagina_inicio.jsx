@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react'
-import './App.css'
+import './inicio.css'
 import Miniatura from './components/miniatura.jsx'
 
-function App() {
+function Pagina_inicio() {
 
   const [filmes, setFilmes] = useState([])
 
   const [carregando, setCarregando] = useState(true)
 
+
   useEffect(() => {
 
-    {/* Se comunica com a api e tenta receber os filmes disponiveis */}
+    {/* Se comunica com a api e tenta receber os filmes disponiveis */ }
 
     fetch("/api/filmes")
 
@@ -24,7 +25,9 @@ function App() {
       .catch(() => setCarregando(false))
   }, [])
 
+
   return (
+
     <div className="tela-inicial">
 
       <header className="cabecalho">
@@ -55,9 +58,11 @@ function App() {
 
           </section>
         )}
+
       </main>
+
     </div>
   )
 }
 
-export default App
+export default Pagina_inicio
