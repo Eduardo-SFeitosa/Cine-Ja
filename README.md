@@ -7,6 +7,7 @@ Projeto feito utilizando React, Node.js e MySQL.
 ## Funcionalidades
 - Listagem de filmes consumindo uma API REST
 - Exibição de pôster, título, duração, gênero e classificação indicativa
+- Sistema de login e usuário
 - Componentes reutilizáveis no frontend
 - Backend com rotas separadas
 - Banco de dados MySQL
@@ -101,13 +102,20 @@ contem as seguinte informações de cada sessão
 - `cinema` - Foreign Key de [cinemas-db](#cinemas-db)
 - `sala` - numero da sala da sessão
 - `filme` - Foreign Key de [filmes-db](#filmes-db)
-- `dia` - o dia da semana em que a sessão está disponivel
-- `horario` - qual o horario da sessão especifica
-- `3d` - define se a sessão sera 3d
+- `dia` - o dia da semana em que a sessão sera apresentada 
+- `horario` - qual o horario da sessão
+- `3d` - define se a sessão sera em 3d
 - `mega` - define se a sala da sessão sera mega
 
 
 
+# usuarios-db
+
+Armazena informações sobre usuários da aplicação com as seguintes informações 
+
+- `usuario` - nome utilizado para login do usuário 
+- `senha` - senha utilizada para login do usuário 
+- `compras` - Ingressos antigos comprados pelo usuário 
 
 
 
