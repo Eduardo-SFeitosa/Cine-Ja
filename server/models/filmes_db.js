@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Filmes = sequelize.define("Filmes", {
+    const filmes = sequelize.define("filmes", {
 
         titulo : {
             type: DataTypes.STRING,
@@ -46,15 +46,18 @@ module.exports = (sequelize, DataTypes) => {
 
     })
 
-    Filmes.associate = (models) => {
-        Filmes.hasMany(models.sessoes_disponiveis, {
-            foreignKey: 'filme_id',
+    filmes.associate = (models) => {
+        filmes.hasMany(models.sessoes_disponiveis, {
+            foreignKey: 'filme',
             as: 'sessoes_disponiveis'
+        })
+
+        filmes.hasMany(models.ingresso, {
+            foreignKey: 'filme',
+            as: 'ingressos'
         })
     }
 
-    
-
-    return Filmes
+    return filmes
 
 }

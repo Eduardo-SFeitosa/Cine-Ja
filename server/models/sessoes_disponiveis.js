@@ -30,15 +30,22 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     sessoes_disponiveis.associate = (models) => {
-        sessoes_disponiveis.belongsTo(models.Filmes, {
+        sessoes_disponiveis.belongsTo(models.filmes, {
             foreignKey: 'filme_id',
-            as: 'filme'
+            as: 'filme_rel'
         })
 
-    sessoes_disponiveis.belongsTo(models.Cinemas, {
+    sessoes_disponiveis.belongsTo(models.cinemas, {
         foreignKey: 'cinema_id',
-        as: 'cinema'
+        as: 'cinema_rel'
     })
+
+    sessoes_disponiveis.hasMany(models.assentos, {
+        foreignKey: 'sessao',
+        as: 'assentos'
+    })
+
+    
     }
 
     return sessoes_disponiveis

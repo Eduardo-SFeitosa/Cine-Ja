@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Cinemas = sequelize.define("Cinemas", {
+    const cinemas = sequelize.define("cinemas", {
 
         nome : {
             type: DataTypes.STRING,
@@ -24,6 +24,19 @@ module.exports = (sequelize, DataTypes) => {
         
     })
 
-    return Cinemas
+    cinemas.associate = (models) => {
+        
+        cinemas.hasMany(models.sessoes_disponiveis, {
+            foreignKey: 'cinema',
+            as: 'sessoes_disponiveis'
+        })
+
+        cinemas.hasMany(models.ingresso, {
+            foreignKey: 'cinema',
+            as: 'ingressos'
+        })
+    }
+
+    return cinemas
 
 }
