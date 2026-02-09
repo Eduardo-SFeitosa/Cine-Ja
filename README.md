@@ -35,11 +35,11 @@ Projeto feito utilizando React, Node.js e MySQL.
 Páginas e componentes auxiliares que a aplicação utiliza para interfaces de usuario
 
 ### Páginas
-- [Página Inicial](#Pagina-Inicial) 
-- [Página de Filmes](#Pagina-de-Filmes) 
+- [Página Inicial](#pagina-inicial) 
+- [Página de Filmes](#pagina-de-filmes) 
 
 ### Componentes reutilizaveis
-- [Miniatura](#Miniatura) 
+- [Miniatura](#miniatura) 
 
 ## Back-end
 Rotas das APIs utilizadas pela aplicação.
@@ -53,19 +53,21 @@ Rotas das APIs utilizadas pela aplicação.
 Tabelas utilizadas para armazenar os dados.
 
 ### Tabelas
+- [usuarios-db](#usuarios-db) 
 - [filmes-db](#filmes-db)
 - [cinemas-db](#cinemas-db)
-- [sessões-disponiveis-db](#sessões-disponiveis-db) 
+- [sessões-disponiveis-db](#sessões-disponiveis-db)
+- [assentos-db](#assentos-db)
+- [ingressos-db](#ingressos-db)
 
-# Pagina-Inicial
+# pagina-inicial
 Página principal do projeto que atua como home page.
 Usa um fetch para pesquisar todos os filmes disponiveis então utiliza [Miniatura](#Miniatura) para criar as miniaturas de todos os filmes do catalogo.
 
-# Pagina-de-Filmes
+# pagina-de-filmes
 Uma página especifica para um filme que mostra todas as informações do filme usando [/filmes/:titulo](#/filmes/:titulo) e em quais cinemas está disponivel e em quais hórarios usando [/sessoes/:titulo](#/sessoes/:titulo).
 
-
-# Miniatura
+# miniatura
 Componente React que recebe nome, capa, duração, classificação indicativa e genero e retorna um elemento \<link\>\<\/link\> de um filme que caso seja clicado leva o usuario para a [Página de Filmes](#Pagina-de-Filmes) do filme escolhido
 
 # /filmes
@@ -77,7 +79,16 @@ Componente React que recebe nome, capa, duração, classificação indicativa e 
 # /sessoes/:titulo
 .get() que pesquisa todas as sessões da [sessões-disponiveis-db](#sessões-disponiveis-db) e retorna aquelas que possuem o valor __filme__ igual ao titulo passado na url
 
+# usuarios-db
+É utilizado como Foreign Key na tabela [ingressos-db](#ingressos-db)
+
+Armazena informações sobre usuários da aplicação com as seguintes informações 
+- `usuario` - nome utilizado para login do usuário 
+- `senha` - senha utilizada para login do usuário 
+
 # filmes-db
+É utilizado como Foreign Key nas tabelas [sessões-disponiveis-db](#sessões-disponiveis-db) e [ingressos-db](#ingressos-db)
+
 Armazena todos os filmes do site guardando as seguintes informações de cada filme
 - `titulo` — nome do filme
 - `poster_url` — URL da imagem do pôster
@@ -91,12 +102,17 @@ Armazena todos os filmes do site guardando as seguintes informações de cada fi
 - `ativo` — define se o filme está disponível no catálogo
 
 # cinemas-db
+É utilizado como Foreign Key nas tabelas [sessões-disponiveis-db](#sessões-disponiveis-db) e [ingressos-db](#ingressos-db)
+
 Armazena todos os cinemas do site guardando as seguintes informações de cada filme
 - `nome` - nome do cinema
-- `salas total` - numero total de salas que o cinema possui
-- `salas mega` - numero de salas mega que o cinema possui
+- `localizacao` - local onde o cinema se encontra
+- `salas total` - número total de salas que o cinema possui
+- `salas mega` - número de salas mega que o cinema possui
 
 # sessões-disponiveis-db
+É utilizado como Foreign Key na tabela [assentos-db](#assentos-db)
+
 Conecta as base de dados [filmes-db](#filmes-db) e [cinemas-db](#cinemas-db) ligando filmes a salas especificas do cinema para criar sessões
 contem as seguinte informações de cada sessão
 - `cinema` - Foreign Key de [cinemas-db](#cinemas-db)
@@ -107,19 +123,24 @@ contem as seguinte informações de cada sessão
 - `3d` - define se a sessão sera em 3d
 - `mega` - define se a sala da sessão sera mega
 
+# assentos-db
+Aplicação utiliza a FK __sessao__ para ordenar assentos a suas respectivas sessões
 
+Armazena as informações de cada assento de uma sessão contendo as seguintes informações
+- `sessao` - Foreign key de [sessões-disponiveis-db](#sessões-disponiveis-db) 
+- `local` - localização do assento na sala utilizando letras A-Z fileiras e números como colunas como A12 e G02
+- `situacao` - Informação se o assento está vendido, foi escolhido ou se está disponivel 
 
-# usuarios-db
-
-Armazena informações sobre usuários da aplicação com as seguintes informações 
-
-- `usuario` - nome utilizado para login do usuário 
-- `senha` - senha utilizada para login do usuário 
-- `compras` - Ingressos antigos comprados pelo usuário 
-
-
-
-
-
+# ingressos-db
+Armazena os ingressos comprados pelo usuario guardando as seguintes informações
+- `usuario` - Foreign Key de [usuarios](#usuarios) que comprou o ingresso
+- `cinema` - Foreign Key de [cinemas-db](#cinemas-db)
+- `sala` - numero da sala da sessão
+- `assento` - assento escolhido pelo usuario
+- `filme` - Foreign Key de [filmes-db](#filmes-db)
+- `dia` - o dia da semana em que a sessão sera apresentada 
+- `horario` - qual o horario da sessão
+- `3d` - define se a sessão sera em 3d
+- `mega` - define se a sala da sessão sera mega
 
 
