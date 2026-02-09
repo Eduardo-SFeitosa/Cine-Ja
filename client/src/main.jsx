@@ -3,9 +3,9 @@ import { createRoot } from 'react-dom/client'
 
 import './index.css'
 
-import Pagina_inicio from './pagina_inicio.jsx'
+import Pagina_inicio from './paginas/pagina_inicio.jsx'
 
-import Pagina_filmes from './components/pagina_filmes.jsx'
+import Pagina_filmes from './paginas/pagina_filmes.jsx'
 
 import {createBrowserRouter, RouterProvider} from "react-router-dom"
 

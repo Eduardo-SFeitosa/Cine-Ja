@@ -1,23 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './pagina_filmes.css';
-import JanelaAssentos from './janela_assentos.jsx';
-
-function formatarDuracao(minutos) {
-    if (minutos == null) return '—';
-    return `${minutos} min`;
-}
-
-function formatarClassificacao(classificacao) {
-    if (classificacao === 0) return 'Livre';
-    if (classificacao == null) return '—';
-    return `${classificacao}+`;
-}
-
+import JanelaAssentos from '../componentes/janela_assentos.jsx';
 
 // Fetch as sessões disponiveis 
 function obterSessoesPorFilme(titulo) {
-
 
     const base = [
         {
@@ -46,7 +33,9 @@ function Pagina_filmes() {
     const [horarioSelecionado, setHorarioSelecionado] = useState(null);
 
     useEffect(() => {
+
         setCarregando(true);
+
         setErro(null);
 
         fetch(`/api/filmes/${encodeURIComponent(titulo)}`)
@@ -70,7 +59,7 @@ function Pagina_filmes() {
 
     if (carregando) {
         return (
-            <div className="pagina-filme pagina-filme--estado">
+            <div className="pagina-filme pagina-filme-estado">
                 <p>Carregando filme...</p>
             </div>
         );
@@ -78,7 +67,7 @@ function Pagina_filmes() {
 
     if (erro) {
         return (
-            <div className="pagina-filme pagina-filme--estado">
+            <div className="pagina-filme pagina-filme-estado">
                 <p>{erro}</p>
             </div>
         );
@@ -86,15 +75,17 @@ function Pagina_filmes() {
 
     if (!filme) {
         return (
-            <div className="pagina-filme pagina-filme--estado">
+            <div className="pagina-filme pagina-filme-estado">
                 <p>Filme não encontrado.</p>
             </div>
         );
     }
 
-    const faixaEtariaTexto = formatarClassificacao(filme.classificacao);
-    const duracaoTexto = formatarDuracao(filme.duracao);
-    const dataLancamento = formatarData(filme.lancamento);
+    const faixaEtariaTexto = filme.classificacao == 0 ? "L" : filme.classificacao;
+
+    const duracaoTexto = (filme.duracao);
+
+    const dataLancamento = (filme.lancamento);
 
     const handleCliqueHorario = (sessao, horario) => {
         setSessaoSelecionada(sessao);
@@ -108,26 +99,26 @@ function Pagina_filmes() {
 
     return (
         <div className="pagina-filme">
-            <header className="pagina-filme__cabecalho">
-                <h1 className="pagina-filme__titulo">{filme.titulo}</h1>
-                <div className="pagina-filme__meta">
-                    <span className="pagina-filme__faixa-etaria">{faixaEtariaTexto}</span>
-                    <span className="pagina-filme__duracao">{duracaoTexto}</span>
-                    <span className="pagina-filme__genero">{filme.genero}</span>
+            <header className="pagina-filme-cabecalho">
+                <h1 className="pagina-filme-titulo">{filme.titulo}</h1>
+                <div className="pagina-filme-meta">
+                    <span className="pagina-filme-faixa-etaria">{faixaEtariaTexto}</span>
+                    <span className="pagina-filme-duracao">{duracaoTexto}</span>
+                    <span className="pagina-filme-genero">{filme.genero}</span>
                 </div>
             </header>
 
-            <main className="pagina-filme__conteudo">
-                <section className="pagina-filme__principal">
-                    <div className="pagina-filme__poster-wrapper">
+            <main className="pagina-filme-conteudo">
+                <section className="pagina-filme-principal">
+                    <div className="pagina-filme-poster-wrapper">
                         <img
-                            className="pagina-filme__poster"
+                            className="pagina-filme-poster"
                             src={`/posters/${filme.poster_url}`}
                             alt={`Poster de ${filme.titulo}`}
                         />
                     </div>
 
-                    <div className="pagina-filme__info">
+                    <div className="pagina-filme-info">
                         <p>
                             <strong>Diretor:</strong> {filme.diretor}
                         </p>
@@ -137,13 +128,13 @@ function Pagina_filmes() {
                         <p>
                             <strong>Lançamento:</strong> {dataLancamento}
                         </p>
-                        <p className="pagina-filme__descricao">
+                        <p className="pagina-filme-descricao">
                             <strong>Descrição:</strong> {filme.descricao}
                         </p>
                     </div>
                 </section>
 
-                <section className="pagina-filme__sessoes">
+                <section className="pagina-filme-sessoes">
 
                     <h2>Cinemas e horários</h2>
 
@@ -151,22 +142,22 @@ function Pagina_filmes() {
                         <p>Não há sessões cadastradas para este filme.</p>
                     ) : (
 
-                        <ul className="pagina-filme__lista-cinemas">
+                        <ul className="pagina-filme-lista-cinemas">
 
                             {sessoes.map((sessao) => (
 
-                                <li key={sessao.id} className="pagina-filme__cinema">
+                                <li key={sessao.id} className="pagina-filme-cinema">
 
-                                    <h3 className="pagina-filme__cinema-nome">{sessao.cinema}</h3>
+                                    <h3 className="pagina-filme-cinema-nome">{sessao.cinema}</h3>
 
-                                    <div className="pagina-filme__horarios">
+                                    <div className="pagina-filme-horarios">
 
                                         {sessao.horarios.map((horario) => (
 
                                             <button
                                                 key={horario}
                                                 type="button"
-                                                className="pagina-filme__horario-botao"
+                                                className="pagina-filme-horario-botao"
                                                 onClick={() => handleCliqueHorario(sessao, horario)}
                                             >
                                                 {horario}

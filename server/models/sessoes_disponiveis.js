@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull : false
         },
 
-        sesssao_3d : {
+        sessao_3d : {
             type: DataTypes.BOOLEAN,
             allowNull : false
         },

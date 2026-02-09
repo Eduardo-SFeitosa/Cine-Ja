@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import './inicio.css'
-import Miniatura from './components/miniatura.jsx'
+import './pagina_inicio.css'
+import Miniatura from '../componentes/miniatura.jsx'
 
 function Pagina_inicio() {
 
@@ -11,7 +11,7 @@ function Pagina_inicio() {
 
   useEffect(() => {
 
-    {/* Se comunica com a api e tenta receber os filmes disponiveis */ }
+    {/* tenta receber os filmes disponiveis */ }
 
     fetch("/api/filmes")
 

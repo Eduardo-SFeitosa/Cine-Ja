@@ -1,40 +1,28 @@
-const express = require('express');
+const express = require("express")
+const route = express.Router()
 
-const route = express.Router();
-
-const { Filmes } = require('../models');
+const filmes_service = require("../services/filmes_services")
 
 //retorna todos os filmes disponiveis da base de dados
-route.get('/', async (request, response) => {
-    
-    const filmes_disponiveis = await Filmes.findAll({
-        where: {
-            disponivel: true
-        }
-    });
+route.get("/", async (request, response) => {
 
-    response.json(filmes_disponiveis);
-});
-
+  const filmes = await filmes_service.filmes_disponiveis()
+  response.json(filmes)
+})
 
 //retorna um filme pelo título
-route.get('/:titulo', async (request, response) => {
+route.get("/:titulo", async (request, response) => {
 
-    const { titulo } = request.params;
+  const filme = await filmes_service.filme_titulo(request.params.titulo)
+  response.json(filme)
+})
 
-    const filme = await Filmes.findOne({ where: { titulo } });
-
-    response.json(filme);
-
-});
 
 //cria um novo filme na base de dados utilizando o request
-route.post('/', async (request, response) => {
-    const novo_filme = request.body;
-
-    await Filmes.create(novo_filme);
-
-    response.json(novo_filme);
-});
+route.post("/", async (request, response) => {
+    
+  const filme = await filmes_service.criar_filme(request.body)
+  response.json(filme)
+})
 
 module.exports = route;
