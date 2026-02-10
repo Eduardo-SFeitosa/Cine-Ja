@@ -1,14 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const ingresso = sequelize.define("ingresso", {
+    const sessoes = sequelize.define("sessoes", {
 
         sala : {
             type: DataTypes.TINYINT,
-            allowNull : false
-        },
-
-        assento : {
-            type: DataTypes.STRING(5),
             allowNull : false
         },
 
@@ -32,53 +27,49 @@ module.exports = (sequelize, DataTypes) => {
             allowNull : false
         },
 
-        filme_id : {
+        filme_id: {
             type: DataTypes.INTEGER,
             allowNull: false
-        },
-
-        cinema_id : {
+          },
+      
+          cinema_id: {
             type: DataTypes.INTEGER,
             allowNull: false
-        },
-
-        usuario_id : {
-            type: DataTypes.INTEGER,
-            allowNull: false
-        },
+          }
         
     },
     {
-        freezeTableName : true
+    freezeTableName : true
     }
 )
 
-    //Cria Foreign Key do filme a ser exibido, cinema que ira exibir e usuario que pertence
-    ingresso.associate = (models) => {
-
-    ingresso.belongsTo(models.filmes, {
+    sessoes.associate = (models) => {
+    
+    sessoes.belongsTo(models.filmes, {
         foreignKey: "filme_id",
+        target : "id",
         as: "filme_rel",
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
     })
 
-    ingresso.belongsTo(models.cinemas, {
+    sessoes.belongsTo(models.cinemas, {
         foreignKey: "cinema_id",
+        target : "id",
         as: "cinema_rel",
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
     })
-    
-    ingresso.belongsTo(models.usuarios, {
-        foreignKey: "usuario_id",
-        as: "usuario_rel",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE"
+
+    sessoes.hasMany(models.assentos, {
+        foreignKey: "sessao_id",
+        as: "assentos"
     })
+
+    
     }
- 
-    return ingresso
+
+    return sessoes
 
 }
 

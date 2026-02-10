@@ -3,42 +3,27 @@ import { useParams } from 'react-router-dom';
 import './pagina_filmes.css';
 import JanelaAssentos from '../componentes/janela_assentos.jsx';
 
-// Fetch as sessões disponiveis 
-function obterSessoesPorFilme(titulo) {
-
-    const base = [
-        {
-            id: 1,
-            cinema: 'Cinema teste',
-            horarios: ['14:00', '17:30', '21:00'],
-        },
-    ];
-
-    // Por enquanto, todos os filmes usam a mesma lista
-    return base.map((sessao) => ({
-        ...sessao,
-        filmeTitulo: titulo,
-    }));
-}
 
 function Pagina_filmes() {
 
-    //pega o titulo do filme que está na url
-    const { titulo } = useParams();
+    //pega a id do filme que está na url
+    const { filme_id } = useParams();
 
     const [filme, setFilme] = useState(null);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState(null);
     const [sessaoSelecionada, setSessaoSelecionada] = useState(null);
     const [horarioSelecionado, setHorarioSelecionado] = useState(null);
+    const [sessoes, setSessoes] = useState({})
 
+    //coleta as informações do filme utilizando a id da url
     useEffect(() => {
 
         setCarregando(true);
 
         setErro(null);
 
-        fetch(`/api/filmes/${encodeURIComponent(titulo)}`)
+        fetch(`/api/filmes/${filme_id}`)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error('Filme não encontrado.');
@@ -53,9 +38,30 @@ function Pagina_filmes() {
                 setErro(err.message || 'Erro ao carregar filme.');
                 setCarregando(false);
             });
-    }, [titulo]);
+    }, []);
 
-    const sessoes = obterSessoesPorFilme(titulo);
+
+    useEffect(() => {
+
+        // Fetch as sessões disponiveis do filme escolhido na data de hoje
+        fetch(`/api/sessoes/${filme_id}/${new Date().toISOString().slice(0, 10)}`)
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+
+                const sessoes_por_cinema = {}
+
+                const cinemas_ids = [...new Set(data.map((sessao) => { return sessao.cinema_id }))]
+
+                for (let cinema_id = 0; cinema_id < cinemas_ids.length; cinema_id++) {
+                    sessoes_por_cinema[cinemas_ids[cinema_id]] = data.filter((sessao) => sessao.cinema_id == cinemas_ids[cinema_id])
+                }
+
+                setSessoes(sessoes_por_cinema);
+            })
+    }, [])
+
 
     if (carregando) {
         return (
@@ -81,19 +87,11 @@ function Pagina_filmes() {
         );
     }
 
-    const faixaEtariaTexto = filme.classificacao == 0 ? "L" : filme.classificacao;
-
-    const duracaoTexto = (filme.duracao);
-
-    const dataLancamento = (filme.lancamento);
-
     const handleCliqueHorario = (sessao, horario) => {
-        setSessaoSelecionada(sessao);
         setHorarioSelecionado(horario);
     };
 
     const fecharJanelaAssentos = () => {
-        setSessaoSelecionada(null);
         setHorarioSelecionado(null);
     };
 
@@ -102,8 +100,8 @@ function Pagina_filmes() {
             <header className="pagina-filme-cabecalho">
                 <h1 className="pagina-filme-titulo">{filme.titulo}</h1>
                 <div className="pagina-filme-meta">
-                    <span className="pagina-filme-faixa-etaria">{faixaEtariaTexto}</span>
-                    <span className="pagina-filme-duracao">{duracaoTexto}</span>
+                    <span className="pagina-filme-faixa-etaria">{filme.classificacao} anos</span>
+                    <span className="pagina-filme-duracao">{filme.duracao} minutos</span>
                     <span className="pagina-filme-genero">{filme.genero}</span>
                 </div>
             </header>
@@ -126,7 +124,7 @@ function Pagina_filmes() {
                             <strong>Atores:</strong> {filme.atores}
                         </p>
                         <p>
-                            <strong>Lançamento:</strong> {dataLancamento}
+                            <strong>Lançamento:</strong> {filme.lancamento}
                         </p>
                         <p className="pagina-filme-descricao">
                             <strong>Descrição:</strong> {filme.descricao}
@@ -144,28 +142,34 @@ function Pagina_filmes() {
 
                         <ul className="pagina-filme-lista-cinemas">
 
-                            {sessoes.map((sessao) => (
+                            {Object.entries(sessoes).map(([cinema_index, sessao_por_cinema]) => 
 
-                                <li key={sessao.id} className="pagina-filme-cinema">
+                                <li key={cinema_index} className="pagina-filme-cinema">
 
-                                    <h3 className="pagina-filme-cinema-nome">{sessao.cinema}</h3>
+                                    {console.log(sessao_por_cinema)}
+
+                                    <h3 className="pagina-filme-cinema-nome">{sessao_por_cinema[0]["cinema_rel.nome"]}</h3>
+
+                                    <h5 className="pagina-filme-cinema-nome">{sessao_por_cinema[0]["cinema_rel.localizacao"]}</h5>
 
                                     <div className="pagina-filme-horarios">
 
-                                        {sessao.horarios.map((horario) => (
+                                        {sessao_por_cinema.map((horario) => (
 
                                             <button
-                                                key={horario}
+                                                key={horario.id}
                                                 type="button"
                                                 className="pagina-filme-horario-botao"
-                                                onClick={() => handleCliqueHorario(sessao, horario)}
+                                                onClick={() => handleCliqueHorario(horario.id)}
                                             >
-                                                {horario}
+                                                {horario.horario}
                                             </button>
                                         ))}
                                     </div>
                                 </li>
-                            ))}
+
+                            )
+                            }
                         </ul>
                     )}
                 </section>

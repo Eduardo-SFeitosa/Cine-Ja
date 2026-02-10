@@ -12,12 +12,18 @@ module.exports = (sequelize, DataTypes) => {
             allowNull : false
         },
 
+    },
+    {
+        freezeTableName : true
     })
 
     assentos.associate = (models) => {
-        assentos.belongsTo(models.sessoes_disponiveis, {
-            foreignKey: 'sessao_id',
-            as: 'sessao'
+        
+        assentos.belongsTo(models.sessoes, {
+            foreignKey: "sessao_id",
+            as: "sessao",
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE"
         })
     }
 

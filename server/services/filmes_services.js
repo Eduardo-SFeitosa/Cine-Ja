@@ -2,15 +2,19 @@ const { filmes } = require("../models");
 
 async function filmes_disponiveis(opcoes = {}) {
 
-  return filmes.findAll({
-    where: { ativo: true}, 
+  return filmes.findAll({ 
     raw: true 
   }, opcoes)
 }
 
-async function filme_titulo(titulo, opcoes = {}) {
+async function filme_id(filme_id, opcoes = {}) {
 
-  return filmes.findOne({ where: { titulo } }, opcoes)
+  return filmes.findOne({ where: 
+    
+    { 
+      id : filme_id 
+    } 
+  }, opcoes)
 }
 
 async function criar_filme(informacoes, opcoes = {}) {
@@ -20,6 +24,6 @@ async function criar_filme(informacoes, opcoes = {}) {
 
 module.exports = {
   filmes_disponiveis,
-  filme_titulo,
+  filme_id,
   criar_filme
 }

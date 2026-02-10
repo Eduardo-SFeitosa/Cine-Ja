@@ -34,17 +34,21 @@ async function criar_itinerario() {
   
   try{
 
+    //limpa as tabelas assentos e sessões 
+    await sessoes_service.limpar_sessoes_db()
+
     const filmes = await filmes_service.filmes_disponiveis({ transaction })
 
     if (filmes.length < 15) {
-      throw new Error('filmes insuficientes');
+      throw new Error("filmes insuficientes");
     }
 
     const cinemas = await cinemas_service.cinemas_disponiveis({ transaction })
 
     const fechamento_hora = 22
     const intervalo_minutos = 20
-    const limite_filmes_semanais = 15
+    //escolhe de 10 a 20 filmes para serem passados pela semana
+    const limite_filmes_semanais = Math.floor(Math.random() * 10) + 10
 
     //seleciona 15 filmes para serem compartilhados entre todos os cinemas
     const index_selecionado = Math.floor(Math.random() * (filmes.length - limite_filmes_semanais + 1))
@@ -96,8 +100,8 @@ async function criar_itinerario() {
 
             const filme_atual = filmes_selecionados[index_filme]
 
-            const hora_atual = String(horario_sessao.getHours()).padStart(2, '0')
-            const minutos_atual = String(horario_sessao.getMinutes()).padStart(2, '0')
+            const hora_atual = String(horario_sessao.getHours()).padStart(2, "0")
+            const minutos_atual = String(horario_sessao.getMinutes()).padStart(2, "0")
 
             itinerario_completo.push(
 
@@ -141,14 +145,13 @@ async function criar_itinerario() {
 
 
 //inicializa a base de dados mysql quando o servidor começa o listen
-sequelize.sync(/* { alter: true } */).then(() => {
+sequelize.sync( { alter: true } ).then(() => {
 
   //cria o servidor no localhost://5000
 
-  app.listen(process.env.port || 5000, () => {
+  app.listen(process.env.port || 5000, async () => {
 
-    console.log("servidor está funcionando")
-
+    console.log("servidor funcionando")
     
   });
 });

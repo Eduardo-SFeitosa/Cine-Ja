@@ -11,12 +11,17 @@ module.exports = (sequelize, DataTypes) => {
             allowNull : false
         },
 
-    })
+    },
+    {
+        freezeTableName : true
+    }
+)
 
     usuarios.associate = (models) => {
+
         usuarios.hasMany(models.ingresso, {
-            foreignKey: 'usuario',
-            as: 'ingressos'
+            foreignKey: "usuario_id",
+            as: "ingressos"
     })
     }
 

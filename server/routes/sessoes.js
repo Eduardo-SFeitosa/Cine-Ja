@@ -3,12 +3,18 @@ const route = express.Router()
 
 const sessoes_service = require("../services/sessoes_services")
 
-//retorna todas as sessões de um filme
-route.get("/:filme", async (request, response) => {
 
-  const sessoes = await sessoes_service.sessoes_disponiveis({
-    where : {filme : request.params.filme}
-  })
+route.get("/", async (request, response) => {
+
+  const sessoes = await sessoes_service.filmes_em_cartaz()
+
+  response.json(sessoes)
+})
+
+//retorna todas as sessões de um filme e dia da sessão
+route.get("/:filme_id/:dia", async (request, response) => {
+
+  const sessoes = await sessoes_service.sessoes_por_filme_id(request.params.filme_id, request.params.dia)
 
   response.json(sessoes)
 })

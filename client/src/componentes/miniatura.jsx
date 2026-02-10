@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom';
 import './miniatura.css';
 
-function Miniatura({ capa, nome, duracao, genero, faixaEtaria }) {
+function Miniatura({ capa, nome, duracao, genero, faixaEtaria, id }) {
   const faixaEtariaTexto =
     faixaEtaria === 0 ? 'Livre' : `${faixaEtaria}+`;
   const duracaoTexto = duracao != null ? `${duracao} min` : '—';
 
-  const urlTitulo = encodeURIComponent(nome);
-
   return (
-    <Link to={`/filmes/${urlTitulo}`} className="miniatura-link">
+    <Link to={`/filmes/${id}`} className="miniatura-link">
       <article className="miniatura-filme">
         <div className="miniatura-capa">
           <img

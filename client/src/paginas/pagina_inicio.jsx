@@ -13,7 +13,7 @@ function Pagina_inicio() {
 
     {/* tenta receber os filmes disponiveis */ }
 
-    fetch("/api/filmes")
+    fetch("/api/sessoes")
 
       .then(res => res.json())
 
@@ -47,12 +47,13 @@ function Pagina_inicio() {
 
             {filmes.map((filme) => (
               <Miniatura
-                key={filme.id}
-                capa={filme.poster_url}
-                nome={filme.titulo}
-                duracao={filme.duracao}
-                genero={filme.genero}
-                faixaEtaria={filme.classificacao}
+                key={filme["filme_rel.id"]}
+                id={filme["filme_rel.id"]}
+                capa={filme["filme_rel.poster_url"]}
+                nome={filme["filme_rel.titulo"]}
+                duracao={filme["filme_rel.duracao"]}
+                genero={filme["filme_rel.genero"]}
+                faixaEtaria={filme["filme_rel.classificacao"]}
               />
             ))}
 

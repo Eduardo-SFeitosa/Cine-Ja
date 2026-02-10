@@ -38,23 +38,24 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATEONLY,
             allowNull : false
         },
-        ativo : {
-            type: DataTypes.BOOLEAN,
-            allowNull : false
-        }
         
 
-    })
+    },
+    {
+        freezeTableName : true
+    }
+    )
 
     filmes.associate = (models) => {
-        filmes.hasMany(models.sessoes_disponiveis, {
-            foreignKey: 'filme',
-            as: 'sessoes_disponiveis'
+
+        filmes.hasMany(models.sessoes, {
+            foreignKey: "filme_id",
+            as: "sessoes"
         })
 
         filmes.hasMany(models.ingresso, {
-            foreignKey: 'filme',
-            as: 'ingressos'
+            foreignKey: "filme_id",
+            as: "ingressos"
         })
     }
 

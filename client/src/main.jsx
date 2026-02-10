@@ -18,7 +18,7 @@ const rotas = createBrowserRouter([
 
 
   //pagina especifica de filme
-  {path:"/filmes/:titulo", element: < Pagina_filmes/>}
+  {path:"/filmes/:filme_id", element: < Pagina_filmes/>}
 
 
 ])

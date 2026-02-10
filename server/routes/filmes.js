@@ -11,9 +11,9 @@ route.get("/", async (request, response) => {
 })
 
 //retorna um filme pelo título
-route.get("/:titulo", async (request, response) => {
+route.get("/:id", async (request, response) => {
 
-  const filme = await filmes_service.filme_titulo(request.params.titulo)
+  const filme = await filmes_service.filme_id(request.params.id)
   response.json(filme)
 })
 
