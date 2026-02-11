@@ -8,6 +8,7 @@ const {sequelize} = require("./models")
 const filmes_service = require("./services/filmes_services")
 const cinemas_service = require("./services/cinemas_services")
 const sessoes_service = require("./services/sessoes_services")
+const assentos_service = require("./services/assentos_services")
 
 const filmes_route = require("./routes/filmes")
 const assentos_route = require("./routes/assentos")
@@ -30,11 +31,11 @@ async function criar_itinerario() {
 
   //cria uma transação para ser usada nas promessas
   const transaction = await sequelize.transaction();
-
   
   try{
 
     //limpa as tabelas assentos e sessões 
+    await assentos_service.limpar_assentos_db()
     await sessoes_service.limpar_sessoes_db()
 
     const filmes = await filmes_service.filmes_disponiveis({ transaction })
@@ -105,6 +106,7 @@ async function criar_itinerario() {
 
             itinerario_completo.push(
 
+              //cria sessões
               sessoes_service.criar_sessao({
                 sala : sala_cinema,
                 //coloca o dia como (ano/mes/dia)
@@ -116,7 +118,14 @@ async function criar_itinerario() {
                 filme_id : filme_atual.id,
                 cinema_id : cinema.id
               }, { transaction })
+            
+              //depois de criar a sessão popula ela com assentos
+              .then(sessao_criada => {
+
+                return assentos_service.popular_sessao(sessao_criada.id, { transaction })
+              })
             )
+            
 
             horario_sessao.setMinutes(horario_sessao.getMinutes() + filme_atual.duracao + intervalo_minutos)
 
@@ -129,7 +138,6 @@ async function criar_itinerario() {
 
       //cria todas as sessões de uma vez
       await Promise.all(itinerario_completo)
-
       //encerra a transação caso as sessões tenham sido criadas
       await transaction.commit()
 

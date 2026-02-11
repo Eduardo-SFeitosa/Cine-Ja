@@ -1,14 +1,14 @@
-const express = require('express');
-
+const express = require("express")
 const route = express.Router()
 
-const { Filmes } = require("../models")
+const assentos_service = require("../services/assentos_services")
 
+//retorna todos os assentos de uma sessão especifica
+route.get("/:sessao_id", async (request, response) => {
 
-route.get("/assentos", (request, response) => {
-    response.json({"fileiras" : ["2", "3", "4"]})
-});
-
+  const assentos = await assentos_service.assentos_por_sessao_id(request.body.sessao_id)
+  response.json(assentos)
+})
 
 
 module.exports = route;

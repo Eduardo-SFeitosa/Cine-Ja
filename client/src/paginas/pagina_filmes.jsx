@@ -65,7 +65,7 @@ function Pagina_filmes() {
 
     if (carregando) {
         return (
-            <div className="pagina-filme pagina-filme-estado">
+            <div className="pagina-filme estado">
                 <p>Carregando filme...</p>
             </div>
         );
@@ -73,7 +73,7 @@ function Pagina_filmes() {
 
     if (erro) {
         return (
-            <div className="pagina-filme pagina-filme-estado">
+            <div className="pagina-filme estado">
                 <p>{erro}</p>
             </div>
         );
@@ -81,13 +81,13 @@ function Pagina_filmes() {
 
     if (!filme) {
         return (
-            <div className="pagina-filme pagina-filme-estado">
+            <div className="pagina-filme estado">
                 <p>Filme não encontrado.</p>
             </div>
         );
     }
 
-    const handleCliqueHorario = (sessao, horario) => {
+    const handleCliqueHorario = (horario) => {
         setHorarioSelecionado(horario);
     };
 
@@ -97,26 +97,26 @@ function Pagina_filmes() {
 
     return (
         <div className="pagina-filme">
-            <header className="pagina-filme-cabecalho">
-                <h1 className="pagina-filme-titulo">{filme.titulo}</h1>
-                <div className="pagina-filme-meta">
-                    <span className="pagina-filme-faixa-etaria">{filme.classificacao} anos</span>
-                    <span className="pagina-filme-duracao">{filme.duracao} minutos</span>
-                    <span className="pagina-filme-genero">{filme.genero}</span>
+            <header className="cabecalho">
+                <h1 className="titulo">{filme.titulo}</h1>
+                <div className="meta">
+                    <span className="faixa-etaria">{filme.classificacao} anos</span>
+                    <span className="duracao">{filme.duracao} minutos</span>
+                    <span className="genero">{filme.genero}</span>
                 </div>
             </header>
 
-            <main className="pagina-filme-conteudo">
-                <section className="pagina-filme-principal">
-                    <div className="pagina-filme-poster-wrapper">
+            <main className="conteudo">
+                <section className="principal">
+                    <div className="poster-wrapper">
                         <img
-                            className="pagina-filme-poster"
+                            className="poster"
                             src={`/posters/${filme.poster_url}`}
                             alt={`Poster de ${filme.titulo}`}
                         />
                     </div>
 
-                    <div className="pagina-filme-info">
+                    <div className="info">
                         <p>
                             <strong>Diretor:</strong> {filme.diretor}
                         </p>
@@ -126,13 +126,13 @@ function Pagina_filmes() {
                         <p>
                             <strong>Lançamento:</strong> {filme.lancamento}
                         </p>
-                        <p className="pagina-filme-descricao">
+                        <p className="descricao">
                             <strong>Descrição:</strong> {filme.descricao}
                         </p>
                     </div>
                 </section>
 
-                <section className="pagina-filme-sessoes">
+                <section className="sessoes">
 
                     <h2>Cinemas e horários</h2>
 
@@ -140,26 +140,26 @@ function Pagina_filmes() {
                         <p>Não há sessões cadastradas para este filme.</p>
                     ) : (
 
-                        <ul className="pagina-filme-lista-cinemas">
+                        <ul className="lista-cinemas">
 
                             {Object.entries(sessoes).map(([cinema_index, sessao_por_cinema]) => 
 
-                                <li key={cinema_index} className="pagina-filme-cinema">
+                                <li key={cinema_index} className="cinema">
 
                                     {console.log(sessao_por_cinema)}
 
-                                    <h3 className="pagina-filme-cinema-nome">{sessao_por_cinema[0]["cinema_rel.nome"]}</h3>
+                                    <h3 className="cinema-nome">{sessao_por_cinema[0]["cinema_rel.nome"]}</h3>
 
-                                    <h5 className="pagina-filme-cinema-nome">{sessao_por_cinema[0]["cinema_rel.localizacao"]}</h5>
+                                    <h5 className="cinema-nome">{sessao_por_cinema[0]["cinema_rel.localizacao"]}</h5>
 
-                                    <div className="pagina-filme-horarios">
+                                    <div className="horarios">
 
                                         {sessao_por_cinema.map((horario) => (
 
                                             <button
                                                 key={horario.id}
                                                 type="button"
-                                                className="pagina-filme-horario-botao"
+                                                className="horario-botao"
                                                 onClick={() => handleCliqueHorario(horario.id)}
                                             >
                                                 {horario.horario}
