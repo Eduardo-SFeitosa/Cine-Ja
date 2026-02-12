@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import './janela_assentos.css';
 
-function JanelaAssentos({ sessao, horario, filme, onClose }) {
-  const [assentos, setAssentos] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState(null);
+function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
+  const [assentos, set_assentos] = useState([]);
+  const [carregando, set_carregando] = useState(true);
+  const [erro, set_erro] = useState(null);
 
   useEffect(() => {
-    setCarregando(true);
-    setErro(null);
+    set_carregando(true);
+    set_erro(null);
 
-    fetch('/api/assentos')
+    fetch(`/api/assentos/${sessao.id}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error('Erro ao carregar assentos.');
@@ -18,40 +18,42 @@ function JanelaAssentos({ sessao, horario, filme, onClose }) {
         return res.json();
       })
       .then((data) => {
+        console.log(data)
         // a rota atual devolve algo como { fileiras: [...] }
-        if (Array.isArray(data.fileiras)) {
-          setAssentos(data.fileiras);
+        if (data) {
+          set_assentos(data);
         } else {
-          setAssentos([]);
+          set_assentos([]);
         }
-        setCarregando(false);
+        set_carregando(false);
       })
       .catch((err) => {
-        setErro(err.message || 'Erro ao carregar assentos.');
-        setCarregando(false);
+        set_erro(err.message || 'Erro ao carregar assentos.');
+        set_carregando(false);
       });
   }, []);
 
   return (
-    <div className="janela-assentos__overlay">
-      <div className="janela-assentos">
-        <header className="janela-assentos__cabecalho">
+    <div className="assentos-overlay">
+      <div className="assentos">
+
+        <header className="assentos-cabecalho">
           <div>
             <h2>{filme.titulo}</h2>
-            <p className="janela-assentos__subtitulo">
-              {sessao.cinema} • {horario}
+            <p className="assentos-subtitulo">
+              {sessao["cinema_rel.nome"]} • {horario}
             </p>
           </div>
           <button
             type="button"
-            className="janela-assentos__fechar"
-            onClick={onClose}
+            className="assentos-fechar"
+            onClick={fechar_janela}
           >
             ×
           </button>
         </header>
 
-        <main className="janela-assentos__conteudo">
+        <main className="assentos-conteudo">
           {carregando && <p>Carregando assentos...</p>}
           {erro && <p>{erro}</p>}
 
@@ -60,13 +62,13 @@ function JanelaAssentos({ sessao, horario, filme, onClose }) {
               {assentos.length === 0 ? (
                 <p>Nenhuma informação de assentos disponível.</p>
               ) : (
-                <div className="janela-assentos__grade">
-                  {assentos.map((item, index) => (
+                <div className="assentos-grade">
+                  {assentos.map((assento) => (
                     <div
-                      key={`${item}-${index}`}
-                      className="janela-assentos__assento"
+                      key={`${assento.local}`}
+                      className={`assentos-assento ${assento.situacao}`}
                     >
-                      {item}
+                      {assento.local}
                     </div>
                   ))}
                 </div>
@@ -74,7 +76,14 @@ function JanelaAssentos({ sessao, horario, filme, onClose }) {
             </>
           )}
         </main>
+
+        <footer>
+
+          
+        </footer>
+
       </div>
+
     </div>
   );
 }

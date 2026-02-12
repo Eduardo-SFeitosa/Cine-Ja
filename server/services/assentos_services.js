@@ -2,7 +2,7 @@ const { assentos } = require("../models");
 
 async function assentos_por_sessao_id(sessao_id, opcoes = {}) {
 
-  return assentos.findOne({
+  return assentos.findAll({
          where: { 
             sessao_id : sessao_id 
             }, 

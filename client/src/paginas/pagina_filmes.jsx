@@ -9,19 +9,18 @@ function Pagina_filmes() {
     //pega a id do filme que está na url
     const { filme_id } = useParams();
 
-    const [filme, setFilme] = useState(null);
-    const [carregando, setCarregando] = useState(true);
-    const [erro, setErro] = useState(null);
-    const [sessaoSelecionada, setSessaoSelecionada] = useState(null);
-    const [horarioSelecionado, setHorarioSelecionado] = useState(null);
-    const [sessoes, setSessoes] = useState({})
+    const [filme, set_filme] = useState(null);
+    const [carregando, set_carregando] = useState(true);
+    const [erro, set_erro] = useState(null);
+    const [sessao_selecionada, set_sessao_selecionada] = useState(null);
+    const [sessoes, set_sessoes] = useState({})
 
     //coleta as informações do filme utilizando a id da url
     useEffect(() => {
 
-        setCarregando(true);
+        set_carregando(true);
 
-        setErro(null);
+        set_erro(null);
 
         fetch(`/api/filmes/${filme_id}`)
             .then((res) => {
@@ -31,12 +30,12 @@ function Pagina_filmes() {
                 return res.json();
             })
             .then((data) => {
-                setFilme(data);
-                setCarregando(false);
+                set_filme(data);
+                set_carregando(false);
             })
             .catch((err) => {
-                setErro(err.message || 'Erro ao carregar filme.');
-                setCarregando(false);
+                set_erro(err.message || 'Erro ao carregar filme.');
+                set_carregando(false);
             });
     }, []);
 
@@ -58,7 +57,7 @@ function Pagina_filmes() {
                     sessoes_por_cinema[cinemas_ids[cinema_id]] = data.filter((sessao) => sessao.cinema_id == cinemas_ids[cinema_id])
                 }
 
-                setSessoes(sessoes_por_cinema);
+                set_sessoes(sessoes_por_cinema);
             })
     }, [])
 
@@ -87,12 +86,14 @@ function Pagina_filmes() {
         );
     }
 
-    const handleCliqueHorario = (horario) => {
-        setHorarioSelecionado(horario);
+    const criar_janela_assentos = (sessao) => {
+
+        set_sessao_selecionada(sessao);
     };
 
-    const fecharJanelaAssentos = () => {
-        setHorarioSelecionado(null);
+    const deletar_janela_assentos = () => {
+
+        set_sessao_selecionada(null);
     };
 
     return (
@@ -146,23 +147,21 @@ function Pagina_filmes() {
 
                                 <li key={cinema_index} className="cinema">
 
-                                    {console.log(sessao_por_cinema)}
-
                                     <h3 className="cinema-nome">{sessao_por_cinema[0]["cinema_rel.nome"]}</h3>
 
                                     <h5 className="cinema-nome">{sessao_por_cinema[0]["cinema_rel.localizacao"]}</h5>
 
                                     <div className="horarios">
 
-                                        {sessao_por_cinema.map((horario) => (
+                                        {sessao_por_cinema.map((sessao_por_sala) => (
 
                                             <button
-                                                key={horario.id}
+                                                key={sessao_por_sala.id}
                                                 type="button"
                                                 className="horario-botao"
-                                                onClick={() => handleCliqueHorario(horario.id)}
+                                                onClick={() => criar_janela_assentos(sessao_por_sala)}
                                             >
-                                                {horario.horario}
+                                                {sessao_por_sala.horario}
                                             </button>
                                         ))}
                                     </div>
@@ -176,12 +175,12 @@ function Pagina_filmes() {
             </main>
 
 
-            {sessaoSelecionada && horarioSelecionado && (
+            { sessao_selecionada && (
                 <JanelaAssentos
-                    sessao={sessaoSelecionada}
-                    horario={horarioSelecionado}
+                    sessao={sessao_selecionada}
+                    horario={sessao_selecionada.horario}
                     filme={filme}
-                    onClose={fecharJanelaAssentos}
+                    fechar_janela={deletar_janela_assentos}
                 />)}
 
         </div>

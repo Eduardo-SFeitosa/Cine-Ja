@@ -1,4 +1,4 @@
- .janela-assentos__overlay {
+ .assentos-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -9,7 +9,7 @@
   z-index: 1000;
 }
 
-.janela-assentos {
+.assentos {
   width: min(520px, 100% - 32px);
   max-height: 80vh;
   background: #0b0e19;
@@ -20,7 +20,7 @@
   overflow: hidden;
 }
 
-.janela-assentos__cabecalho {
+.assentos-cabecalho {
   padding: 16px 18px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
@@ -29,18 +29,18 @@
   gap: 8px;
 }
 
-.janela-assentos__cabecalho h2 {
+.assentos-cabecalho h2 {
   margin: 0;
   font-size: 1.2rem;
 }
 
-.janela-assentos__subtitulo {
+.assentos-subtitulo {
   margin: 2px 0 0 0;
   font-size: 0.85rem;
   color: #d0d1dd;
 }
 
-.janela-assentos__fechar {
+.assentos-fechar {
   border: none;
   background: transparent;
   color: #f4f4f4;
@@ -49,25 +49,36 @@
   padding: 2px 6px;
 }
 
-.janela-assentos__conteudo {
+.assentos-conteudo {
   padding: 16px 18px 20px 18px;
   overflow-y: auto;
   font-size: 0.95rem;
 }
 
-.janela-assentos__grade {
+.assentos-grade {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+  grid-template-columns: repeat(7, minmax(40px, 1fr));
   gap: 8px;
   margin-top: 8px;
 }
 
-.janela-assentos__assento {
+.assentos-assento {
   padding: 8px 6px;
   text-align: center;
   border-radius: 6px;
-  background: #1c2237;
   color: #f4f4f4;
   font-size: 0.85rem;
+
 }
 
+.livre{
+  background: #1b5709;
+}
+
+.reservado {
+  background: #585858;
+}
+
+.ocupado {
+  background: #700000;
+}
