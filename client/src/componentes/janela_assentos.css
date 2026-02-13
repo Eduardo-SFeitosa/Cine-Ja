@@ -69,16 +69,23 @@
   color: #f4f4f4;
   font-size: 0.85rem;
 
+  /* previne que o texto seja selecionado */
+  -webkit-touch-callout: none; 
+  -webkit-user-select: none; 
+  -khtml-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none;
 }
 
 .livre{
   background: #1b5709;
 }
 
-.reservado {
-  background: #585858;
+.reservado, .ocupado{
+  background: #252525;
 }
 
-.ocupado {
+.selecionado {
   background: #700000;
 }

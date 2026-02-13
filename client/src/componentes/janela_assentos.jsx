@@ -3,6 +3,7 @@ import './janela_assentos.css';
 
 function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
   const [assentos, set_assentos] = useState([]);
+  const [assentos_selecionados, set_assentos_selecionados] = useState([])
   const [carregando, set_carregando] = useState(true);
   const [erro, set_erro] = useState(null);
 
@@ -19,7 +20,7 @@ function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
       })
       .then((data) => {
         console.log(data)
-        // a rota atual devolve algo como { fileiras: [...] }
+        
         if (data) {
           set_assentos(data);
         } else {
@@ -32,6 +33,18 @@ function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
         set_carregando(false);
       });
   }, []);
+
+  const selecionar_assento = (local) => {
+
+    if (assentos_selecionados.includes(local)){
+      set_assentos_selecionados(
+        assentos_selecionados.filter((assento) => assento !== local)
+      )
+    }else  {
+      set_assentos_selecionados([...assentos_selecionados, local])
+    }
+    
+  }
 
   return (
     <div className="assentos-overlay">
@@ -64,9 +77,10 @@ function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
               ) : (
                 <div className="assentos-grade">
                   {assentos.map((assento) => (
-                    <div
+                    <div 
+                      onClick={assento.situacao == "livre" ? () => selecionar_assento(assento.local) : () => {}}
                       key={`${assento.local}`}
-                      className={`assentos-assento ${assento.situacao}`}
+                      className={`assentos-assento ${assentos_selecionados.includes(assento.local) ? "selecionado" : assento.situacao }`}
                     >
                       {assento.local}
                     </div>
@@ -79,6 +93,13 @@ function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
 
         <footer>
 
+          {!assentos_selecionados.length ? <>
+            <h3>selecione os assentos</h3>
+          </>:
+
+          <>
+            <h3>proximo passo</h3>
+          </>}
           
         </footer>
 
