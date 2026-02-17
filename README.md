@@ -46,8 +46,12 @@ Rotas das APIs utilizadas pela aplicação.
 
 ### APIs
 - [/filmes](#/filmes)
-- [/filmes/:titulo](#/filmes/:titulo)
-- [/sessoes/:titulo](#/sessoes/:titulo)
+- [/filmes/:filme](#/filmes/:titulo)
+- [/sessoes/:filme](#/sessoes/:filme)
+- [/sessoes/:filme/:dia](#/sessoes/:filme/:dia)
+- [/assentos/:sessao](#/assentos/:sessao)
+- [/cinemas](#/cinemas)
+- [/sessoes/:nome](#/cinemas/:nome)
 
 ## Banco de dados
 Tabelas utilizadas para armazenar os dados.
@@ -78,6 +82,12 @@ Componente React que recebe nome, capa, duração, classificação indicativa e 
 
 # /sessoes/:titulo
 .get() que pesquisa todas as sessões da [sessões-disponiveis-db](#sessões-disponiveis-db) e retorna aquelas que possuem o valor __filme__ igual ao titulo passado na url
+
+# /sessoes/:filme/:dia
+.get que pesquisa todas as sessoes da [sessões-disponiveis-db](#sessões-disponiveis-db) e retorna aquelas com __filme__ e __dia__ iguais as informadas na url
+
+# /assentos/:sessao
+.get() que passa todas os assentos da [assentos-db](#assentos-db) que possui a __sessao__ informada na url
 
 # usuarios-db
 É utilizado como Foreign Key na tabela [ingressos-db](#ingressos-db)
