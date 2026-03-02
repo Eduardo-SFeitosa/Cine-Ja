@@ -1,5 +1,5 @@
 /* layout geral da página de filme */
-.pagina-filme {
+.pagina-filmes {
     min-height: 100vh;
     padding: 24px;
     background: radial-gradient(circle at top, #101322 0, #05060a 60%);
@@ -17,7 +17,7 @@
     margin-bottom: 8px;
 }
 
-.meta {
+.detalhes {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -25,7 +25,7 @@
     color: #c7c9d3;
 }
 
-.faixa-etaria {
+.classificacao {
     padding: 4px 8px;
     border-radius: 4px;
     background: #2d3b55;
@@ -63,11 +63,6 @@
 
 .info p {
     margin: 6px 0;
-}
-
-.descricao {
-    margin-top: 16px;
-    line-height: 1.5;
 }
 
 .sessoes {

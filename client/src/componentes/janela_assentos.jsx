@@ -72,7 +72,7 @@ function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
 
           {!carregando && !erro && (
             <>
-              {assentos.length === 0 ? (
+              {assentos.length == 0 ? (
                 <p>Nenhuma informação de assentos disponível.</p>
               ) : (
                 <div className="assentos-grade">
