@@ -2,7 +2,7 @@
 .pagina-filmes {
     min-height: 100vh;
     padding: 24px;
-    background: radial-gradient(circle at top, #101322 0, #05060a 60%);
+    background: radial-gradient(circle at top, #000000 0, #000000 60%);
     color: #f4f4f4;
     box-sizing: border-box;
 }
@@ -27,8 +27,7 @@
 
 .classificacao {
     padding: 4px 8px;
-    border-radius: 4px;
-    background: #2d3b55;
+    background: #0059ff;
 }
 
 .duracao,
@@ -56,7 +55,6 @@
 
 .poster {
     width: 100%;
-    border-radius: 12px;
     box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
     object-fit: cover;
 }
@@ -85,8 +83,7 @@
 
 .cinema {
     padding: 12px 14px;
-    border-radius: 10px;
-    background: rgba(10, 14, 28, 0.9);
+    background: rgba(58, 77, 146, 0.9);
     border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
@@ -103,7 +100,6 @@
 
 .horario-botao {
     padding: 6px 10px;
-    border-radius: 6px;
     border: none;
     background: #e7b341;
     color: #101322;

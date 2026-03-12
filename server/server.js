@@ -9,11 +9,13 @@ const filmes_service = require("./services/filmes_services")
 const cinemas_service = require("./services/cinemas_services")
 const sessoes_service = require("./services/sessoes_services")
 const assentos_service = require("./services/assentos_services")
+const ingressos_service = require("./services/ingressos_services")
 
 const filmes_route = require("./routes/filmes")
 const assentos_route = require("./routes/assentos")
 const cinemas_route = require("./routes/cinemas")
 const sessoes_route = require("./routes/sessoes")
+const ingressos_route = require("./routes/ingressos")
 
 app.use(cors())
 app.use(express.json())
@@ -25,6 +27,8 @@ app.use("/assentos", assentos_route)
 app.use("/cinemas", cinemas_route)
 
 app.use("/sessoes", sessoes_route)
+
+app.use("/ingressos", ingressos_route)
 
 //Função para criar o itinerario da semana para cada cinema
 async function criar_itinerario() {
@@ -149,8 +153,6 @@ async function criar_itinerario() {
 
   
 }
-
-
 
 //inicializa a base de dados mysql quando o servidor começa o listen
 sequelize.sync( { alter: true } ).then(() => {

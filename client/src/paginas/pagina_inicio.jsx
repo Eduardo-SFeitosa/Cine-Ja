@@ -6,8 +6,6 @@ function Pagina_inicio() {
 
   const [filmes, setFilmes] = useState([])
 
-  const [carregando, setCarregando] = useState(true)
-
 
   useEffect(() => {
 
@@ -18,11 +16,9 @@ function Pagina_inicio() {
       .then(res => res.json())
 
       .then(data => {
+        
         setFilmes(Array.isArray(data) ? data : [])
-        setCarregando(false)
       })
-
-      .catch(() => setCarregando(false))
   }, [])
 
 
@@ -35,17 +31,18 @@ function Pagina_inicio() {
       </header>
 
       <main className="conteudo">
-        {carregando ? (
-          <p className="mensagem">Carregando filmes...</p>
-        ) : filmes.length === 0 ? (
-          <p className="mensagem">Nenhum filme encontrado.</p>
-        ) : (
 
           <section className="lista-filmes">
 
             {/* Cria uma miniatura para cada filme que a api responder */}
 
-            {filmes.map((filme) => (
+            { filmes.length == 0 ? 
+
+            (<h1>sem filmes disponiveis</h1>)
+            
+              :
+
+            (filmes.map((filme) => (
               <Miniatura
                 key={filme["filme_rel.id"]}
                 id={filme["filme_rel.id"]}
@@ -55,10 +52,9 @@ function Pagina_inicio() {
                 genero={filme["filme_rel.genero"]}
                 faixaEtaria={filme["filme_rel.classificacao"]}
               />
-            ))}
+            ))) }
 
           </section>
-        )}
 
       </main>
 

@@ -52,8 +52,6 @@ async function limpar_assentos_db(opcoes = {}) {
       }, opcoes);
 }
 
-
-
 module.exports = {
     assentos_por_sessao_id,
     modificar_assento,

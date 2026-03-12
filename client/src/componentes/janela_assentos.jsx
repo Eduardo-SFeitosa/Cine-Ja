@@ -1,37 +1,50 @@
 import { useEffect, useState } from 'react';
 import './janela_assentos.css';
 
-function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
+const confirmar_ingressos = async (sessao_selecionada, assentos_selecionados) => {
+
+  await fetch("/api/ingressos", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+
+        "assentos_selecionados" : assentos_selecionados,
+
+        "sessao_selecionada" : sessao_selecionada
+
+      })
+    });
+
+}
+
+function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) {
   const [assentos, set_assentos] = useState([]);
   const [assentos_selecionados, set_assentos_selecionados] = useState([])
-  const [carregando, set_carregando] = useState(true);
-  const [erro, set_erro] = useState(null);
 
+  console.log(sessao)
+
+  //pega todos os assentos de uma sessão especifica
   useEffect(() => {
-    set_carregando(true);
-    set_erro(null);
 
     fetch(`/api/assentos/${sessao.id}`)
-      .then((res) => {
-        if (!res.ok) {
+      .then((response) => {
+        if (!response.ok) {
           throw new Error('Erro ao carregar assentos.');
         }
-        return res.json();
+        return response.json();
       })
-      .then((data) => {
-        console.log(data)
+
+      .then((response) => {
         
-        if (data) {
-          set_assentos(data);
+        if (response) {
+          set_assentos(response);
         } else {
           set_assentos([]);
         }
-        set_carregando(false);
       })
-      .catch((err) => {
-        set_erro(err.message || 'Erro ao carregar assentos.');
-        set_carregando(false);
-      });
+
   }, []);
 
   const selecionar_assento = (local) => {
@@ -54,7 +67,7 @@ function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
           <div>
             <h2>{filme.titulo}</h2>
             <p className="assentos-subtitulo">
-              {sessao["cinema_rel.nome"]} • {horario}
+              {sessao["cinema_rel.nome"]} • {horario} • sala {sala_numero}
             </p>
           </div>
           <button
@@ -67,10 +80,8 @@ function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
         </header>
 
         <main className="assentos-conteudo">
-          {carregando && <p>Carregando assentos...</p>}
-          {erro && <p>{erro}</p>}
 
-          {!carregando && !erro && (
+          {(
             <>
               {assentos.length == 0 ? (
                 <p>Nenhuma informação de assentos disponível.</p>
@@ -98,7 +109,14 @@ function JanelaAssentos({ sessao, horario, filme, fechar_janela }) {
           </>:
 
           <>
+
             <h3>proximo passo</h3>
+
+            <button className="assentos-assento livre" onClick={() => confirmar_ingressos(sessao, assentos_selecionados)}>
+
+              confirmar ingresso
+
+            </button>
           </>}
           
         </footer>

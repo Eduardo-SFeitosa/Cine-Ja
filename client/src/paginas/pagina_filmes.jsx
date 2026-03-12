@@ -3,6 +3,38 @@ import { useParams } from 'react-router-dom';
 import './pagina_filmes.css';
 import JanelaAssentos from '../componentes/janela_assentos.jsx';
 
+const organizar_sessoes_por_sala = (sessoes) => {
+
+    const cinemas_ids = [...new Set(sessoes.map((sessao) => { return sessao.cinema_id }))]
+
+    const sessoes_por_cinema_sala = {}
+
+    for (let cinema =  0; cinema < cinemas_ids.length; cinema ++){
+
+        sessoes_por_cinema_sala[cinemas_ids[cinema]] = {}
+
+        for (let sessao = 0; sessao < sessoes.length; sessao ++){
+
+            if (sessoes[sessao].cinema_id == cinemas_ids[cinema]){
+
+                if (!(sessoes[sessao].sala in sessoes_por_cinema_sala[cinemas_ids[cinema]])){
+
+                    sessoes_por_cinema_sala[cinemas_ids[cinema]][sessoes[sessao].sala] = []
+
+                }
+
+                sessoes_por_cinema_sala[cinemas_ids[cinema]][sessoes[sessao].sala].push(sessoes[sessao])
+
+            }
+
+        }
+
+    }
+
+    return sessoes_por_cinema_sala
+
+}
+
 
 function Pagina_filmes() {
 
@@ -28,10 +60,6 @@ function Pagina_filmes() {
 
                 set_filme(data);
             })
-            .catch((err) => {
-
-                set_erro(err.message || 'Erro ao carregar filme.');
-            });
     }, []);
 
 
@@ -40,25 +68,18 @@ function Pagina_filmes() {
 
         // Fetch as sessões disponiveis do filme escolhido na data de hoje
         fetch(`/api/sessoes/${filme_id}/${new Date().toISOString().slice(0, 10)}`)
-            .then((res) => {
+            .then((response) => {
 
-                return res.json();
+                return response.json();
+                
             })
-            .then((data) => {
 
-                const sessoes_por_cinema = {}
+            .then((response) => {
 
-                const cinemas_ids = [...new Set(data.map((sessao) => { return sessao.cinema_id }))]
-
-                for (let cinema_id = 0; cinema_id < cinemas_ids.length; cinema_id++) {
-                    sessoes_por_cinema[cinemas_ids[cinema_id]] = data.filter((sessao) => sessao.cinema_id == cinemas_ids[cinema_id])
-                }
-
-                console.log(sessoes_por_cinema)
-
-                set_sessoes(sessoes_por_cinema);
+                set_sessoes(organizar_sessoes_por_sala(response));
             })
     }, [])
+
 
     const criar_janela_assentos = (sessao) => {
 
@@ -124,8 +145,10 @@ function Pagina_filmes() {
 
                     <h2>Sessões</h2>
 
-                    {sessoes.length == 0 ? (
+                    {Object.keys(sessoes).length == 0 ? (
+                        
                         <p>Não existe sessões para este filme.</p>
+
                     ) : (
 
                         <ul className="lista-cinemas">
@@ -134,22 +157,38 @@ function Pagina_filmes() {
 
                                 <li key={cinema_index} className="cinema">
 
-                                    <h3 className="cinema-nome">{sessao_por_cinema[0]["cinema_rel.nome"]}</h3>
+                                    <h3 className="cinema-nome">cinema {sessao_por_cinema[Object.keys(sessao_por_cinema)[0]][0]["cinema_rel.nome"]}</h3>
 
-                                    <h5 className="cinema-nome">{sessao_por_cinema[0]["cinema_rel.localizacao"]}</h5>
+                                    <h5 className="cinema-nome">rua placeholder {sessao_por_cinema[Object.keys(sessao_por_cinema)[0]][0]["cinema_rel.localizacao"]}</h5>
 
-                                    <div className="horarios">
+                                    <div className="salas">
 
-                                        {sessao_por_cinema.map((sessao_por_sala) => (
+                                        {Object.entries(sessao_por_cinema).map(([sala_index, sessao_por_sala]) => (
 
-                                            <button
-                                                key={sessao_por_sala.id}
+                                            <>
+
+                                            <h2>sala {sessao_por_sala[0].sala + 1}</h2>
+
+                                            <div className="horarios">
+
+                                            {sessao_por_sala.map(sala => {
+
+                                                return (<button
+                                                key={sala.sala_id}
                                                 type="button"
                                                 className="horario-botao"
-                                                onClick={() => criar_janela_assentos(sessao_por_sala)}
-                                            >
-                                                {sessao_por_sala.horario}
-                                            </button>
+                                                onClick={() => criar_janela_assentos(sala)}
+                                                >
+                                                    {sala.horario}
+                                                </button>)
+
+                                            })}   
+
+                                            </div>
+                                            
+                                            <br />                                     
+
+                                            </>
                                         ))}
                                     </div>
                                 </li>
@@ -167,6 +206,7 @@ function Pagina_filmes() {
                 <JanelaAssentos
                     sessao={sessao_selecionada}
                     horario={sessao_selecionada.horario}
+                    sala_numero={sessao_selecionada.sala}
                     filme={filme}
                     fechar_janela={deletar_janela_assentos}
                 />)}
