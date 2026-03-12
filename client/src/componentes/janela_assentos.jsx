@@ -1,45 +1,38 @@
-import { useEffect, useState } from 'react';
-import './janela_assentos.css';
-
-const confirmar_ingressos = async (sessao_selecionada, assentos_selecionados) => {
-
-  const response = await fetch("/api/ingressos", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-
-      "assentos_selecionados" : assentos_selecionados,
-
-      "sessao_selecionada" : sessao_selecionada
-
-    })
-  });
-
-}
+import { useEffect, useState } from "react";
+import "./janela_assentos.css";
 
 function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) {
+
   const [assentos, set_assentos] = useState([]);
+
   const [assentos_selecionados, set_assentos_selecionados] = useState([])
+
+  const [processo, set_proesso] = useState("");
 
   //pega todos os assentos de uma sessão especifica
   useEffect(() => {
 
     fetch(`/api/assentos/${sessao.id}`)
       .then((response) => {
+
         if (!response.ok) {
-          throw new Error('Erro ao carregar assentos.');
+          throw new Error("Erro ao carregar assentos.");
+
         }
         return response.json();
+
       })
 
       .then((response) => {
         
         if (response) {
+
           set_assentos(response);
+          set_proesso("carregado")
+
         } else {
           set_assentos([]);
+
         }
       })
 
@@ -57,15 +50,59 @@ function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) 
     
   }
 
+  const confirmar_ingressos = async (sessao_selecionada, assentos_selecionados) => {
+
+  const response = await fetch("/api/ingressos", {
+    
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+
+      "assentos_selecionados" : assentos_selecionados,
+
+      "sessao_selecionada" : sessao_selecionada
+
+    })
+  });
+
+  if (response.status == 200){
+
+    set_proesso("ingressos comprados")
+
+  }
+
+  }
+
   return (
-    <div className="assentos-overlay">
+
+    <div className="janela_assentos">
       <div className="assentos">
 
+
+    {processo == "ingressos comprados"? (<div>
+
+      <h2>Ingressos comprados com sucesso</h2>
+
+      <button
+            type="button"
+            className="assentos-fechar"
+            onClick={fechar_janela}
+          >
+            ×
+        </button>
+
+    </div>)
+    
+    : processo == "carregado" ?
+    
+      (<>
         <header className="assentos-cabecalho">
           <div>
             <h2>{filme.titulo}</h2>
             <p className="assentos-subtitulo">
-              {sessao["cinema_rel.nome"]} • {horario} • sala {sala_numero}
+              {sessao["cinema_rel.nome"]} • {horario} • sala {sala_numero + 1}
             </p>
           </div>
           <button
@@ -89,6 +126,7 @@ function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) 
                     <div 
                       onClick={assento.situacao == "livre" ? () => selecionar_assento(assento.local) : () => {}}
                       key={`${assento.local}`}
+                      id={`${assento.local}`}
                       className={`assentos-assento ${assentos_selecionados.includes(assento.local) ? "selecionado" : assento.situacao }`}
                     >
                       {assento.local}
@@ -119,9 +157,20 @@ function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) 
           
         </footer>
 
+      </>)
+
+      : (<div>
+
+        <h2>Nenhum assento disponivel</h2>
+
+      </div>)
+    
+    }
+
       </div>
 
     </div>
+
   );
 }
 

@@ -1,51 +1,78 @@
 const express = require("express")
 const route = express.Router()
+const { sequelize } = require("../models")
+
 
 const sessoes_service = require("../services/ingressos_services")
 const assentos_service = require("../services/assentos_services")
 
-//cria um ingresso com as informações fornecidas
+//cria um ingresso com as informações fornecidas e coloca os assentos como ocupados
 route.post("/", async (request, response) => {
 
-    const assentos_selecionados = request.body.assentos_selecionados
+    //se uma função da da base de dados não funcionar a transação ira desfazer as outras funcões
+    const transacao = await sequelize.transaction()
 
-    const sessao_selecionada = request.body.sessao_selecionada
+    try{
 
-    const post_http_response = []
+        const assentos_selecionados = request.body.assentos_selecionados
 
-    for (let ingresso = 0; ingresso < Object.keys(assentos_selecionados).length; ingresso ++){
+        const sessao_selecionada = request.body.sessao_selecionada
 
-        const assento_id = await assentos_service.assento_por_local_sessao(assentos_selecionados[ingresso], sessao_selecionada)
+        const post_http_response = []
+        
 
-        post_http_response.push(await sessoes_service.criar_ingresso({
+        for (let ingresso = 0; ingresso < Object.keys(assentos_selecionados).length; ingresso ++){
 
-            sala : sessao_selecionada.sala,
+            const assento_id = await assentos_service.assento_por_local_sessao(assentos_selecionados[ingresso], sessao_selecionada, { transacao })
 
-            assento : assentos_selecionados[ingresso],
+            post_http_response.push(await sessoes_service.criar_ingresso({
 
-            dia : sessao_selecionada.dia,
+                sala : sessao_selecionada.sala,
 
-            horario : sessao_selecionada.horario,
+                assento : assentos_selecionados[ingresso],
 
-            sessao_3d : sessao_selecionada.sessao_3d,
+                dia : sessao_selecionada.dia,
 
-            sala_mega : sessao_selecionada.sala_mega,
+                horario : sessao_selecionada.horario,
 
-            filme_id : sessao_selecionada.filme_id,
+                sessao_3d : sessao_selecionada.sessao_3d,
 
-            cinema_id : sessao_selecionada.cinema_id,
+                sala_mega : sessao_selecionada.sala_mega,
 
-            usuario_id : 1,
+                filme_id : sessao_selecionada.filme_id,
 
-        }))
+                cinema_id : sessao_selecionada.cinema_id,
 
-        assentos_service.modificar_assento(assento_id.id, "ocupado")
+                usuario_id : 1,
+
+            }, { transacao }))
+
+            assentos_service.modificar_assento(assento_id.id, "ocupado", { transacao })
+
+        }
+
+        await transacao.commit()
+
+        response.status(200).json({
+        success: true,
+        message: "ingresso comprado"
+        })
+
+    }
+
+    catch(error){
+
+        await transacao.rollback()
+
+        response.status(500).json({
+        success: false,
+        message: "erro ao comprar ingresso",
+        error: error.message
+        })
 
     }
 
     
-
-    response.json(post_http_response)
 
 })
 
