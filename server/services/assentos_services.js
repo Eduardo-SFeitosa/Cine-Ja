@@ -10,9 +10,20 @@ async function assentos_por_sessao_id(sessao_id, opcoes = {}) {
     },opcoes)
 }
 
+async function assento_por_local_sessao(assento_local, sessao, opcoes ={}){
+
+    const assento = await assentos.findOne({where : {
+        sessao_id : sessao.id,
+        local : assento_local
+    }}, opcoes)
+
+    return assento
+
+}
+
 async function modificar_assento(assento_id ,situacao_atualizada, opcoes ={}){
 
-    const assento_escolhido = assentos.findOne({where : {id : assento_id}}, opcoes)
+    const assento_escolhido = await assentos.findOne({where : {id : assento_id}}, opcoes)
 
     assento_escolhido.situacao = situacao_atualizada
 
@@ -54,6 +65,7 @@ async function limpar_assentos_db(opcoes = {}) {
 
 module.exports = {
     assentos_por_sessao_id,
+    assento_por_local_sessao,
     modificar_assento,
     popular_sessao,
     limpar_assentos_db

@@ -3,27 +3,25 @@ import './janela_assentos.css';
 
 const confirmar_ingressos = async (sessao_selecionada, assentos_selecionados) => {
 
-  await fetch("/api/ingressos", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
+  const response = await fetch("/api/ingressos", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
 
-        "assentos_selecionados" : assentos_selecionados,
+      "assentos_selecionados" : assentos_selecionados,
 
-        "sessao_selecionada" : sessao_selecionada
+      "sessao_selecionada" : sessao_selecionada
 
-      })
-    });
+    })
+  });
 
 }
 
 function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) {
   const [assentos, set_assentos] = useState([]);
   const [assentos_selecionados, set_assentos_selecionados] = useState([])
-
-  console.log(sessao)
 
   //pega todos os assentos de uma sessão especifica
   useEffect(() => {
