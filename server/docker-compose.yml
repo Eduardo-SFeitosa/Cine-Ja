@@ -1,0 +1,46 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: cineja-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: cine_ja_db
+      # Se você tiver usuário diferente de root, pode adicionar:
+      # MYSQL_USER: user
+      # MYSQL_PASSWORD: userpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - localhost
+
+  server:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: cineja-server
+    restart: always
+    depends_on:
+      - db
+    environment:
+      # Ajusta para o host do docker-compose
+      DB_HOST: localhost
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: cine_ja_db
+      DB_DIALECT: mysql
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    networks:
+      - localhost
+
+networks:
+  localhost:
+    driver: bridge
+
+volumes:
+  db_data:

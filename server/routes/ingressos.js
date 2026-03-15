@@ -6,10 +6,8 @@ const { sequelize } = require("../models")
 const sessoes_service = require("../services/ingressos_services")
 const assentos_service = require("../services/assentos_services")
 
-//cria um ingresso com as informações fornecidas e coloca os assentos como ocupados
 route.post("/", async (request, response) => {
 
-    //se uma função da da base de dados não funcionar a transação ira desfazer as outras funcões
     const transacao = await sequelize.transaction()
 
     try{

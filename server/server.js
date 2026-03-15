@@ -154,14 +154,32 @@ async function criar_itinerario() {
   
 }
 
-//inicializa a base de dados mysql quando o servidor começa o listen
-sequelize.sync( { alter: true } ).then(() => {
+// função para tentar conectar no banco com tentativas e espera entre elas
+async function iniciarServidorComBanco(tentativa = 1) {
+  const maxTentativas = 10;
+  const atrasoMs = 5000;
 
-  //cria o servidor no localhost://5000
+  try {
+    await sequelize.sync({ alter: true });
 
-  app.listen(process.env.port || 5000, async () => {
+    const porta = process.env.PORT || 3000;
+    app.listen(porta, async () => {
+      console.log(`servidor funcionando na porta ${porta}`);
+    });
+  } catch (error) {
+    if (tentativa >= maxTentativas) {
+      console.error("Não foi possível conectar ao banco após várias tentativas:", error);
+      process.exit(1);
+    }
 
-    console.log("servidor funcionando")
-    
-  });
-});
+    console.warn(
+      `Falha ao conectar ao banco (tentativa ${tentativa}/${maxTentativas}). ` +
+      `Tentando novamente em ${atrasoMs / 1000} segundos...`
+    );
+
+    setTimeout(() => iniciarServidorComBanco(tentativa + 1), atrasoMs);
+  }
+}
+
+// inicializa a base de dados MySQL quando o servidor começa o listen
+iniciarServidorComBanco();

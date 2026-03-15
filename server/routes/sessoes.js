@@ -12,7 +12,6 @@ route.get("/", async (request, response) => {
   
 })
 
-//retorna todas as sessões de um filme e dia da sessão
 route.get("/:filme_id/:dia", async (request, response) => {
 
   const sessoes = await sessoes_service.sessoes_por_filme_id(request.params.filme_id, request.params.dia)
@@ -22,11 +21,11 @@ route.get("/:filme_id/:dia", async (request, response) => {
 })
 
 
-//cria um novo filme na base de dados utilizando o request
 route.post("/", async (request, response) => {
     
-  const cinema = await sessoes_service.criar_cinema(request.body)
+  const cinema = await sessoes_service.criar_sessao(request.body)
   response.json(cinema)
+
 })
 
 module.exports = route;
