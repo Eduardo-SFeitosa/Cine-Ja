@@ -154,7 +154,6 @@ async function criar_itinerario() {
   
 }
 
-// função para tentar conectar no banco com tentativas e espera entre elas
 async function iniciarServidorComBanco(tentativa = 1) {
   const maxTentativas = 10;
   const atrasoMs = 5000;
@@ -180,6 +179,6 @@ async function iniciarServidorComBanco(tentativa = 1) {
     setTimeout(() => iniciarServidorComBanco(tentativa + 1), atrasoMs);
   }
 }
+ 
 
-// inicializa a base de dados MySQL quando o servidor começa o listen
 iniciarServidorComBanco();
