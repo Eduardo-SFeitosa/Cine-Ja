@@ -7,6 +7,8 @@ import Pagina_inicio from './paginas/pagina_inicio.jsx'
 
 import Pagina_filmes from './paginas/pagina_filmes.jsx'
 
+import Pagina_usuario from './paginas/pagina_usuario.jsx'
+
 import {createBrowserRouter, RouterProvider} from "react-router-dom"
 
 
@@ -18,8 +20,10 @@ const rotas = createBrowserRouter([
 
 
   //pagina especifica de filme
-  {path:"/filmes/:filme_id", element: < Pagina_filmes/>}
+  {path:"/filmes/:filme_id", element: < Pagina_filmes/>},
 
+  //ppagina de usuario único
+  {path:"/usuario/:usuario_id", element: <pagina_usuario/>}
 
 ])
 

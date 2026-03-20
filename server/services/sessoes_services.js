@@ -25,7 +25,6 @@ async function sessoes_por_filme_id(filme_id, dia, opcoes = {}) {
 
 }
 
-
 async function filmes_em_cartaz(opcoes = {}){
   
   return sessoes.findAll({
