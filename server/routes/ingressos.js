@@ -3,7 +3,7 @@ const route = express.Router()
 const { sequelize } = require("../models")
 
 
-const sessoes_service = require("../services/ingressos_services")
+const ingressos_services = require("../services/ingressos_services")
 const assentos_service = require("../services/assentos_services")
 
 route.post("/", async (request, response) => {
@@ -23,7 +23,7 @@ route.post("/", async (request, response) => {
 
             const assento_id = await assentos_service.assento_por_local_sessao(assentos_selecionados[ingresso], sessao_selecionada, { transacao })
 
-            post_http_response.push(await sessoes_service.criar_ingresso({
+            post_http_response.push(await ingressos_services.criar_ingresso({
 
                 sala : sessao_selecionada.sala,
 
@@ -70,7 +70,21 @@ route.post("/", async (request, response) => {
 
     }
 
+})
+
+route.get("/:ingresso_id", async (request, response) => {
+
+    const ingresso = await ingressos_services.ingresso_por_id(request.params.ingresso_id)
     
+    response.json(ingresso)
+
+})
+
+route.get("/usuario/:usuario_id", async (request, response) => {
+
+    const ingressos = await ingressos_services.ingressos_por_usuario(request.params.usuario_id)
+    
+    response.json(ingressos)
 
 })
 
