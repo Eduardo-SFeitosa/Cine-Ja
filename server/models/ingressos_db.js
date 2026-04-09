@@ -46,6 +46,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+
+        situacao : {
+            type: DataTypes.STRING,
+            allowNull : false
+        },
         
     },
     {
@@ -73,6 +78,13 @@ module.exports = (sequelize, DataTypes) => {
     ingresso.belongsTo(models.usuarios, {
         foreignKey: "usuario_id",
         as: "usuario_rel",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
+    })
+
+    ingresso.belongsTo(models.pedido, {
+        foreignKey: "pedido_id",
+        as: "pedido_rel",
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
     })
