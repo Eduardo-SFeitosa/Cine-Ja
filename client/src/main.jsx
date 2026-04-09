@@ -23,7 +23,7 @@ const rotas = createBrowserRouter([
   {path:"/filmes/:filme_id", element: < Pagina_filmes/>},
 
   //ppagina de usuario único
-  {path:"/usuario/:usuario_id", element: <pagina_usuario/>}
+  {path:"/usuario/:usuario_id", element: <Pagina_usuario/>}
 
 ])
 

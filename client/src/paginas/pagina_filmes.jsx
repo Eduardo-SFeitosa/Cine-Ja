@@ -49,12 +49,12 @@ function Pagina_filmes() {
     useEffect(() => {
 
         fetch(`/api/filmes/${filme_id}`)
-            .then((res) => {
+            .then((resposta) => {
 
-                if (!res.ok) {
+                if (!resposta.ok) {
                     throw new Error('Filme não encontrado.');
                 }
-                return res.json();
+                return resposta.json();
             })
             .then((data) => {
 

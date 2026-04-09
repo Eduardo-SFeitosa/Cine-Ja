@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import './pagina_inicio.css'
+
 import Miniatura from '../componentes/miniatura.jsx'
+
+import Cabecalho from '../componentes/cabecalho.jsx'
 
 function Pagina_inicio() {
 
@@ -26,9 +29,7 @@ function Pagina_inicio() {
 
     <div className="tela-inicial">
 
-      <header className="cabecalho">
-        <h1>Cine Já</h1>
-      </header>
+      <Cabecalho />
 
       <main className="conteudo">
 
