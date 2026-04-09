@@ -16,6 +16,8 @@ const assentos_route = require("./routes/assentos")
 const cinemas_route = require("./routes/cinemas")
 const sessoes_route = require("./routes/sessoes")
 const ingressos_route = require("./routes/ingressos")
+const usuarios_route = require("./routes/usuarios")
+const pedidos_route = require("./routes/pedidos")
 
 app.use(cors())
 app.use(express.json())
@@ -29,6 +31,10 @@ app.use("/cinemas", cinemas_route)
 app.use("/sessoes", sessoes_route)
 
 app.use("/ingressos", ingressos_route)
+
+app.use("/pedidos", pedidos_route)
+
+app.use("/usuarios", usuarios_route)
 
 //Função para criar o itinerario da semana para cada cinema
 async function criar_itinerario() {
