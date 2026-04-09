@@ -2,6 +2,10 @@ const { filmes } = require("../models");
 
 async function filmes_disponiveis(opcoes = {}) {
 
+  console.log(filmes.findAll({ 
+    raw: true 
+  }, opcoes))
+
   return filmes.findAll({ 
     raw: true 
   }, opcoes)

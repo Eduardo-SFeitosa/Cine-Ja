@@ -44,6 +44,8 @@ async function criar_itinerario() {
 
     const filmes = await filmes_service.filmes_disponiveis({ transaction })
 
+    console.log("criando")
+
     if (filmes.length < 15) {
       throw new Error("filmes insuficientes");
     }
@@ -155,6 +157,7 @@ async function criar_itinerario() {
 }
 
 async function iniciarServidorComBanco(tentativa = 1) {
+
   const maxTentativas = 10;
   const atrasoMs = 5000;
 
@@ -163,6 +166,9 @@ async function iniciarServidorComBanco(tentativa = 1) {
 
     const porta = process.env.PORT || 3000;
     app.listen(porta, async () => {
+
+      await criar_itinerario()
+      console.log("Filmes")
       console.log(`servidor funcionando na porta ${porta}`);
     });
   } catch (error) {
