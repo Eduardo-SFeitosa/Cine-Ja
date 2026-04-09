@@ -1,0 +1,33 @@
+const express = require("express")
+const route = express.Router()
+
+const usuario_services = require("../services/usuario_servicess")
+
+//cria novo usuario
+route.post("/", async (request, response) => {
+
+  const usuario = await usuario_services.criar_usuario(request.body)
+
+  response.json(usuario)
+  
+})
+
+//modifica senha e ou nome de usuario
+route.put("/:usuario_id", async (request, response) => {
+
+  const sessoes = await usuario_services.modificar_usuario(request.params.usuario_id, request.body)
+
+  response.json(sessoes)
+
+})
+
+//deleta usuario
+route.delete("/:usuario_id", async (request, response) => {
+    
+  const cinema = await usuario_services.deletar_usuario(request.params.usuario_id, request.body)
+
+  response.json(cinema)
+
+})
+
+module.exports = route;
