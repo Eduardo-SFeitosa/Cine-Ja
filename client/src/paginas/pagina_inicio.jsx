@@ -6,7 +6,6 @@ function Pagina_inicio() {
 
   const [filmes, setFilmes] = useState([])
 
-
   useEffect(() => {
 
     {/* tenta receber os filmes disponiveis */ }
@@ -16,6 +15,8 @@ function Pagina_inicio() {
       .then(res => res.json())
 
       .then(data => {
+
+        console.log(data)
         
         setFilmes(Array.isArray(data) ? data : [])
       })

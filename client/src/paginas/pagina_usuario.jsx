@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import './pagina_usuarios.css';
+import './pagina_inicio.css'
 
 function Pagina_usuarios(){
 
