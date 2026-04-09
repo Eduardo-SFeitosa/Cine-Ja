@@ -45,7 +45,7 @@ route.post("/", async (request, response) => {
 
             }, { transacao }))
 
-            assentos_service.modificar_assento(assento_id.id, "ocupado", { transacao })
+            assentos_service.modificar_assento(assento_id.id, "reservado", { transacao })
 
         }
 
@@ -53,7 +53,7 @@ route.post("/", async (request, response) => {
 
         response.status(200).json({
         success: true,
-        message: "ingresso comprado"
+        message: "ingresso reservado"
         })
 
     }

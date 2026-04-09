@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './pagina_filmes.css';
-import JanelaAssentos from '../componentes/janela_assentos.jsx';
+import Cabecalho from '../componentes/cabecalho.jsx';
+import janela_assentos from '../componentes/janela_assentos.jsx';
 
 const organizar_sessoes_por_sala = (sessoes) => {
 
@@ -49,12 +50,12 @@ function Pagina_filmes() {
     useEffect(() => {
 
         fetch(`/api/filmes/${filme_id}`)
-            .then((res) => {
+            .then((resposta) => {
 
-                if (!res.ok) {
+                if (!resposta.ok) {
                     throw new Error('Filme não encontrado.');
                 }
-                return res.json();
+                return resposta.json();
             })
             .then((data) => {
 
@@ -94,6 +95,8 @@ function Pagina_filmes() {
     return (
 
         <>
+
+        <Cabecalho />
 
         {   filme == null ? (<>
 
@@ -203,7 +206,7 @@ function Pagina_filmes() {
 
             { sessao_selecionada && (
 
-                <JanelaAssentos
+                <janela_assentos
                     sessao={sessao_selecionada}
                     horario={sessao_selecionada.horario}
                     sala_numero={sessao_selecionada.sala}

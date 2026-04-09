@@ -3,7 +3,6 @@ const route = express.Router()
 
 const sessoes_service = require("../services/sessoes_services")
 
-
 route.get("/", async (request, response) => {
 
   const sessoes = await sessoes_service.filmes_em_cartaz()
@@ -19,7 +18,6 @@ route.get("/:filme_id/:dia", async (request, response) => {
   response.json(sessoes)
 
 })
-
 
 route.post("/", async (request, response) => {
     

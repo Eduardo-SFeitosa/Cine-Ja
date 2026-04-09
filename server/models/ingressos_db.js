@@ -32,6 +32,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull : false
         },
 
+        pedido_id : {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+
         filme_id : {
             type: DataTypes.INTEGER,
             allowNull: false
@@ -45,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
         usuario_id : {
             type: DataTypes.INTEGER,
             allowNull: false
+        },
+
+        situacao : {
+            type: DataTypes.STRING,
+            allowNull : false
         },
         
     },
@@ -73,6 +83,13 @@ module.exports = (sequelize, DataTypes) => {
     ingresso.belongsTo(models.usuarios, {
         foreignKey: "usuario_id",
         as: "usuario_rel",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
+    })
+
+    ingresso.belongsTo(models.pedido, {
+        foreignKey: "pedido_id",
+        as: "pedido_rel",
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
     })

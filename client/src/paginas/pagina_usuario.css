@@ -1,0 +1,7 @@
+.pagina-usuario {
+    min-height: 100vh;
+    padding: 24px;
+    background: radial-gradient(circle at top, #000000 0, #000000 60%);
+    color: #f4f4f4;
+    box-sizing: border-box;
+}
