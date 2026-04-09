@@ -8,18 +8,17 @@ module.exports = (sequelize, DataTypes) => {
         },
 
         validade : {
-            type : DataTypes.DATETIME,
+            type : DataTypes.DATE,
             allowNull : false
         },
         
-    },
-)
+    })
 
     pedido.associate = (models) => {
     
     pedido.hasMany(models.ingresso, {
-        foreignKey: "ingresso_id",
-        as: "ingresso"
+        foreignKey: "pedido_id",
+        as: "ingressos"
     })
 
     pedido.belongsTo(models.usuarios, {
