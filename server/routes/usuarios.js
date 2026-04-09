@@ -1,7 +1,7 @@
 const express = require("express")
 const route = express.Router()
 
-const usuario_services = require("../services/usuario_servicess")
+const usuario_services = require("../services/usuarios_services")
 
 //cria novo usuario
 route.post("/", async (request, response) => {

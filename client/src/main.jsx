@@ -18,7 +18,6 @@ const rotas = createBrowserRouter([
   //pagina principal do site
   {path:"/", element: < Pagina_inicio/>},
 
-
   //pagina especifica de filme
   {path:"/filmes/:filme_id", element: < Pagina_filmes/>},
 
