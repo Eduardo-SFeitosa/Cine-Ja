@@ -4,7 +4,7 @@ const { cinemas, filmes, sessoes } = require("../models");
 //retorna todas as sessões de um filme especifico e dia especifico
 async function sessoes_por_filme_id(filme_id, dia, opcoes = {}) {
 
-  return sessoes.findAll({
+  const sessoes_disponiveis = await sessoes.findAll({
 
       //JOIN tabela filmes com a tabela de sessoes
       include: {
@@ -23,11 +23,13 @@ async function sessoes_por_filme_id(filme_id, dia, opcoes = {}) {
 
   }, opcoes)
 
+  return sessoes_disponiveis
+
 }
 
 async function filmes_em_cartaz(opcoes = {}){
   
-  return sessoes.findAll({
+  return await sessoes.findAll({
 
     //JOIN tabela filmes com a tabela de sessoes
     include: {
@@ -50,7 +52,7 @@ async function filmes_em_cartaz(opcoes = {}){
 
 async function criar_sessao(informacoes, opcoes = {}) {
 
-  return sessoes.create(informacoes, opcoes)
+  return await sessoes.create(informacoes, opcoes)
 
 }
 
@@ -60,6 +62,8 @@ async function limpar_sessoes_db(){
     truncate: false,
     cascade: true
   });
+
+  return true
 }
 
 module.exports = {

@@ -2,11 +2,13 @@ const { cinemas } = require("../models");
 
 async function cinemas_disponiveis(opcoes = {}) {
 
-  const cinemas_listados = cinemas.findAll({raw: true}, opcoes)
+  const cinemas_listados = await cinemas.findAll({raw: true}, opcoes)
 
   if (cinemas_listados.length <= 0) {
 
     await popular_cinemas(30)
+
+    console.log("cinemas populados com sucesso")
 
     return await cinemas.findAll({ 
       raw: true 
@@ -14,16 +16,10 @@ async function cinemas_disponiveis(opcoes = {}) {
 
   }
 
-  return cinemas.findAll({raw: true}, opcoes)
+  return cinemas_listados
 }
 
 async function popular_cinemas(qtd = 20) {
-  const cinemasExistentes = await cinemas.findAll({ raw: true })
-
-  if (cinemasExistentes.length > 0) {
-    console.log("Cinemas já populados")
-    return
-  }
 
   const nomesBase = [
     "dragonlandia", "alagoinha", "mocoto", 
@@ -53,7 +49,7 @@ async function popular_cinemas(qtd = 20) {
     await criar_cinema(cinema)
   }
 
-  console.log(`${qtd} cinemas aleatórios criados com sucesso`)
+  return true
 }
 
 function numero_aleatorio(min, max){

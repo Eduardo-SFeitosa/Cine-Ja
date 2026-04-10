@@ -50,7 +50,7 @@ async function criar_itinerario() {
 
     const filmes = await filmes_service.filmes_disponiveis({ transaction })
 
-    console.log("criando")
+    console.log("criando itnerario")
 
     if (filmes.length < 15) {
       console.log(await filmes_service.filmes_disponiveis({ transaction }))
@@ -154,6 +154,8 @@ async function criar_itinerario() {
       //encerra a transação caso as sessões tenham sido criadas
       await transaction.commit()
 
+      console.log("itinerario criado")
+
   }catch (error) {
     
     await transaction.rollback();
@@ -174,8 +176,6 @@ async function iniciarServidorComBanco(tentativa = 1) {
     const porta = process.env.PORT || 3000;
     app.listen(porta, async () => {
 
-      await criar_itinerario()
-      console.log("Filmes")
       console.log(`servidor funcionando na porta ${porta}`);
     });
   } catch (error) {
@@ -192,6 +192,5 @@ async function iniciarServidorComBanco(tentativa = 1) {
     setTimeout(() => iniciarServidorComBanco(tentativa + 1), atrasoMs);
   }
 }
- 
 
 iniciarServidorComBanco();

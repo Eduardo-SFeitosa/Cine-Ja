@@ -2,15 +2,17 @@ const { filmes } = require("../models");
 
 async function filmes_disponiveis(opcoes = {}) {
 
-  const filmes_listados = filmes.findAll({ 
+  const filmes_listados = await filmes.findAll({ 
     raw: true 
-  }, opcoes)
+  }, opcoes) 
 
   if (filmes_listados.length <= 0) {
 
     await popular_filmes(60)
 
-    return filmes.findAll({ 
+    console.log("filmes populados com sucesso")
+
+    return await filmes.findAll({ 
     raw: true 
     }, opcoes)
 
@@ -21,12 +23,6 @@ async function filmes_disponiveis(opcoes = {}) {
 }
 
 async function popular_filmes(qtd = 20) {
-  const filmesExistentes = await filmes_disponiveis()
-
-  if (filmesExistentes.length > 0) {
-    console.log("Filmes já populados")
-    return
-  }
 
   const palavras = [
     "doido", "maluco", "sombrio", "perdido",
@@ -56,7 +52,7 @@ async function popular_filmes(qtd = 20) {
     await criar_filme(filme)
   }
 
-  console.log(`${qtd} filmes aleatórios criados com sucesso`)
+  return true
 }
 
 function numero_aleatorio(min, max){
