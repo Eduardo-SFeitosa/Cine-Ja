@@ -5,11 +5,9 @@ const app = express()
 
 const {sequelize} = require("./models")
 
-const filmes_service = require("./services/filmes_services")
-const cinemas_service = require("./services/cinemas_services")
-const sessoes_service = require("./services/sessoes_services")
-const assentos_service = require("./services/assentos_services")
-const ingressos_service = require("./services/ingressos_services")
+const itinerario_services = require("./services/itinerario_services")
+const sessoes_services = require("./services/sessoes_services")
+const usuario_services = require("./services/usuarios_services")
 
 const filmes_route = require("./routes/filmes")
 const assentos_route = require("./routes/assentos")
@@ -36,151 +34,32 @@ app.use("/pedidos", pedidos_route)
 
 app.use("/usuarios", usuarios_route)
 
-//Função para criar o itinerario da semana para cada cinema
-async function criar_itinerario() {
-
-  //cria uma transação para ser usada nas promessas
-  const transaction = await sequelize.transaction();
-  
-  try{
-
-    //limpa as tabelas assentos e sessões 
-    await assentos_service.limpar_assentos_db()
-    await sessoes_service.limpar_sessoes_db()
-
-    const filmes = await filmes_service.filmes_disponiveis({ transaction })
-
-    console.log("criando itnerario")
-
-    if (filmes.length < 15) {
-      console.log(await filmes_service.filmes_disponiveis({ transaction }))
-      throw new Error("filmes insuficientes");
-    }
-
-    const cinemas = await cinemas_service.cinemas_disponiveis({ transaction })
-
-    const fechamento_hora = 22
-    const intervalo_minutos = 20
-    //escolhe de 10 a 20 filmes para serem passados pela semana
-    const limite_filmes_semanais = Math.floor(Math.random() * 10) + 10
-
-    //seleciona 15 filmes para serem compartilhados entre todos os cinemas
-    const index_selecionado = Math.floor(Math.random() * (filmes.length - limite_filmes_semanais + 1))
-    const filmes_semanais = filmes.slice(index_selecionado, index_selecionado + limite_filmes_semanais)
-    
-    const itinerario_completo = []
-
-    for (let numero_cinema = 0; numero_cinema < cinemas.length; numero_cinema ++){
-
-      const cinema = cinemas[numero_cinema]
-
-      //seleciona 4 a 8 filmes dos filmes semanais que serão os filmes desse cinema
-      const quantidade_selecionada = Math.floor(Math.random() * 5) + 4
-      const filmes_selecionados = [];
-
-      while (filmes_selecionados.length < quantidade_selecionada){
-
-        const novo_filme = filmes_semanais[Math.floor(Math.random() * filmes_semanais.length)]
-
-        if (!filmes_selecionados.includes(novo_filme)){
-
-          filmes_selecionados.push(novo_filme)
-        }
-
-      }
-
-      //seleciona qual horario entre 10:00 e 15:00 o cinema vai abrir
-      const horario_inicial = Math.floor(Math.random() * 6) + 10
-
-      for(let sala_cinema = 0; sala_cinema < cinema.salas_total; sala_cinema ++){
-
-        //for cada dia da semana
-        for(let dia_semana = 0; dia_semana < 7; dia_semana ++){
-
-          //cria e ajusta o horario inicial e dia
-          const horario_sessao = new Date()
-          horario_sessao.setHours(horario_inicial, 0, 0, 0)
-          horario_sessao.setDate(horario_sessao.getDate() + dia_semana)
-
-          //escolhe um filme aleatorio para começar a rotação de filmes
-          let index_filme = Math.floor(Math.random() * filmes_selecionados.length)
-
-          //enquanto horario da sessão for menor que 22:00(hora de fechar) o codigo adiciona sessões
-          while (horario_sessao.getHours() >= horario_inicial && horario_sessao.getHours() <= fechamento_hora){
-
-            if (index_filme >= filmes_selecionados.length){
-              index_filme = 0
-            }
-
-            const filme_atual = filmes_selecionados[index_filme]
-
-            const hora_atual = String(horario_sessao.getHours()).padStart(2, "0")
-            const minutos_atual = String(horario_sessao.getMinutes()).padStart(2, "0")
-
-            itinerario_completo.push(
-
-              //cria sessões
-              sessoes_service.criar_sessao({
-                sala : sala_cinema,
-                //coloca o dia como (ano/mes/dia)
-                dia : horario_sessao.toISOString().slice(0, 10),
-                horario : `${hora_atual}:${minutos_atual}`,
-                //20% de chance da sessão ser em 3D
-                sessao_3d : Math.random() < 0.2 ? 1 : 0,
-                sala_mega : sala_cinema <= cinema.salas_mega,
-                filme_id : filme_atual.id,
-                cinema_id : cinema.id
-              }, { transaction })
-            
-              //depois de criar a sessão popula ela com assentos
-              .then(sessao_criada => {
-
-                return assentos_service.popular_sessao(sessao_criada.id, { transaction })
-              })
-            )
-            
-
-            horario_sessao.setMinutes(horario_sessao.getMinutes() + filme_atual.duracao + intervalo_minutos)
-
-            index_filme += 1
-
-          }
-        }
-      }
-    }
-
-      //cria todas as sessões de uma vez
-      await Promise.all(itinerario_completo)
-      //encerra a transação caso as sessões tenham sido criadas
-      await transaction.commit()
-
-      console.log("itinerario criado")
-
-  }catch (error) {
-    
-    await transaction.rollback();
-    throw error;
-  }
-
-  
-}
-
 async function iniciarServidorComBanco(tentativa = 1) {
 
   const maxTentativas = 10;
   const atrasoMs = 5000;
 
   try {
-    await sequelize.sync({ alter: true });
+
+    await sequelize.sync({ alter: true })
 
     const porta = process.env.PORT || 3000;
     app.listen(porta, async () => {
 
-      console.log(`servidor funcionando na porta ${porta}`);
-    });
+      await checar_itinerario()
+
+      console.log("itinerario checado")
+
+      await checar_usuario()
+
+      console.log("usuario checado")
+
+      console.log(`servidor funcionando na porta ${porta}`)
+
+    })
   } catch (error) {
     if (tentativa >= maxTentativas) {
-      console.error("Não foi possível conectar ao banco após várias tentativas:", error);
+      console.error("Não foi possível conectar ao banco após várias tentativas:", error)
       process.exit(1);
     }
 
@@ -191,6 +70,32 @@ async function iniciarServidorComBanco(tentativa = 1) {
 
     setTimeout(() => iniciarServidorComBanco(tentativa + 1), atrasoMs);
   }
+}
+
+async function checar_itinerario() {
+
+  const sessoes_disponiveis = await sessoes_services.sessoes_existentes()
+
+  if (sessoes_disponiveis.length <= 0) {
+
+      await itinerario_services.criar_itinerario()
+
+      console.log("itinerario criado")
+
+  }
+
+  return true
+
+}
+
+async function checar_usuario() {
+
+  await usuario_services.checar_usaurio_base()
+
+  console.log("usuario base checado")
+
+  return true
+
 }
 
 iniciarServidorComBanco();

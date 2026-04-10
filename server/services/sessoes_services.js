@@ -27,6 +27,14 @@ async function sessoes_por_filme_id(filme_id, dia, opcoes = {}) {
 
 }
 
+async function sessoes_existentes(opcoes = {}){
+
+  return await sessoes.findAll({
+    raw: true
+  }, opcoes)
+
+}
+
 async function filmes_em_cartaz(opcoes = {}){
   
   return await sessoes.findAll({
@@ -68,7 +76,8 @@ async function limpar_sessoes_db(){
 
 module.exports = {
   sessoes_por_filme_id,
+  sessoes_existentes,
   criar_sessao,
   filmes_em_cartaz,
-  limpar_sessoes_db
+  limpar_sessoes_db,
 }
