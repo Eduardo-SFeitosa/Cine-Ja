@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./janela_assentos.css";
 
-function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) {
+function Janela_assentos({ sessao, horario, sala_numero, filme, fechar_janela }) {
 
   const [assentos, set_assentos] = useState([]);
 
@@ -98,13 +98,19 @@ function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) 
     : processo == "carregado" ?
     
       (<>
+
         <header className="assentos-cabecalho">
+
           <div>
+
             <h2>{filme.titulo}</h2>
+
             <p className="assentos-subtitulo">
               {sessao["cinema_rel.nome"]} • {horario} • sala {sala_numero + 1}
             </p>
+
           </div>
+
           <button
             type="button"
             className="assentos-fechar"
@@ -112,6 +118,7 @@ function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) 
           >
             ×
           </button>
+
         </header>
 
         <main className="assentos-conteudo">
@@ -174,5 +181,5 @@ function JanelaAssentos({ sessao, horario, sala_numero, filme, fechar_janela }) 
   );
 }
 
-export default JanelaAssentos;
+export default Janela_assentos;
 
