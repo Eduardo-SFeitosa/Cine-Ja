@@ -31,11 +31,12 @@ services:
       DB_NAME: cine_ja_db
       DB_DIALECT: mysql
       NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
     ports:
       - "3000:3000"
     volumes:
       - .:/app
-      - /app/node_modules
+      - node_modules:/app/node_modules
 
     command: npm run dev
 
@@ -48,3 +49,4 @@ networks:
 
 volumes:
   db_data:
+  node_modules:

@@ -1,4 +1,4 @@
-const { usuarios, sessoes } = require("../models");
+const { usuarios } = require("../models");
 
 async function modificar_usuario(usuario_id, novas_informacoes , opcoes = {}) {
 
@@ -23,7 +23,25 @@ async function deletar_usuario(usuario_id, opcoes = {}){
 
 async function criar_usuario(usuario_informacoes ,opcoes = {}) {
 
-  return sessoes.create(informacoes, opcoes)
+  return usuarios.create(usuario_informacoes, opcoes)
+
+}
+
+async function checar_usaurio_base(opcoes = {}) {
+
+  const usuario_base = await usuarios.findOne({where : {
+    id : 1
+  }},opcoes)
+
+  if (!usuario_base) {
+
+    await criar_usuario({usuario : "usuario_base", senha : "123"})
+
+    console.log("usuario base criado")
+
+  }
+
+  return true
 
 }
 
@@ -31,4 +49,5 @@ module.exports = {
   criar_usuario,
   deletar_usuario,
   modificar_usuario,
+  checar_usaurio_base,
 }

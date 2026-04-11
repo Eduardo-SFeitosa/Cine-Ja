@@ -15,13 +15,13 @@ function Pagina_inicio() {
 
     fetch("/api/sessoes")
 
-      .then(res => res.json())
+      .then(resposta => resposta.json())
 
-      .then(data => {
+      .then(resposta => {
 
-        console.log(data)
+        console.log(resposta)
         
-        setFilmes(Array.isArray(data) ? data : [])
+        setFilmes(Array.isArray(resposta) ? resposta : [])
       })
   }, [])
 
