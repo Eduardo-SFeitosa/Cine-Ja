@@ -2,6 +2,8 @@ const { ingresso } = require("../models");
 
 async function criar_ingresso(informacoes, opcoes = {}) {
 
+  console.log("criando ingresso")
+
   return ingresso.create(informacoes, opcoes)
 
 }

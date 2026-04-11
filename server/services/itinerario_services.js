@@ -2,6 +2,7 @@ const filmes_service = require("../services/filmes_services")
 const cinemas_service = require("../services/cinemas_services")
 const sessoes_service = require("../services/sessoes_services")
 const assentos_service = require("../services/assentos_services")
+const {sequelize} = require("../models")
 
 //Função para criar o itinerario da semana para cada cinema
 async function criar_itinerario() {

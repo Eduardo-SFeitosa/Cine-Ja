@@ -9,8 +9,14 @@ module.exports = (sequelize, DataTypes) => {
 
         validade : {
             type : DataTypes.DATE,
-            allowNull : false
+            allowNull : false,
+            defaultValue : () => new Date(Date.now() + 2 * 60 * 60 * 1000)
         },
+
+        usuario_id : {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
         
     })
 

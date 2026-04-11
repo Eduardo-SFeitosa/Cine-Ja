@@ -1,8 +1,10 @@
-const { pedidos } = require("../models");
+const { pedido } = require("../models");
 
-async function criar_pedido(usuario_informacoes ,opcoes = {}) {
+async function criar_pedido(informacoes ,opcoes = {}) {
 
-  return pedidos.create(informacoes, opcoes)
+  console.log(informacoes)
+
+  return pedido.create(informacoes, opcoes)
 
 }
 
@@ -22,7 +24,7 @@ async function pedidos_por_usuario_id(usaurio_id, opcoes = {}) {
 
 async function modificar_situacao(pedido_id ,situacao_atualizada, opcoes ={}){
 
-    const pedido = await pedidos.findOne({where : {id : pedido_id}}, opcoes)
+    const pedido = await pedido.findOne({where : {id : pedido_id}}, opcoes)
 
     pedido.situacao = situacao_atualizada
 

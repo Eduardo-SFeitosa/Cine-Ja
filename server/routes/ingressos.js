@@ -5,10 +5,13 @@ const { sequelize } = require("../models")
 
 const ingressos_services = require("../services/ingressos_services")
 const assentos_service = require("../services/assentos_services")
+const pedido_service = require("../services/pedidos_services")
 
 route.post("/", async (request, response) => {
 
     const transacao = await sequelize.transaction()
+
+    console.log("ingresso sendo criado")
 
     try{
 
@@ -17,8 +20,16 @@ route.post("/", async (request, response) => {
         const sessao_selecionada = request.body.sessao_selecionada
 
         const post_http_response = []
-        
 
+        console.log("pedido sendo criado")
+
+        const pedido = await pedido_service.criar_pedido({
+            situacao : "aguardando pagamento",
+            usuario_id : 1,
+        }, { transacao })
+
+        console.log(pedido)
+        
         for (let ingresso = 0; ingresso < Object.keys(assentos_selecionados).length; ingresso ++){
 
             const assento_id = await assentos_service.assento_por_local_sessao(assentos_selecionados[ingresso], sessao_selecionada, { transacao })
@@ -35,7 +46,11 @@ route.post("/", async (request, response) => {
 
                 sessao_3d : sessao_selecionada.sessao_3d,
 
+                situacao : "aguardando pagamento",
+
                 sala_mega : sessao_selecionada.sala_mega,
+
+                pedido_id : pedido.id,
 
                 filme_id : sessao_selecionada.filme_id,
 
@@ -45,11 +60,17 @@ route.post("/", async (request, response) => {
 
             }, { transacao }))
 
+            console.log("ingresso adicionado a fila")
+
             assentos_service.modificar_assento(assento_id.id, "reservado", { transacao })
+
+            console.log("assento adicionado a fila")
 
         }
 
         await transacao.commit()
+
+        console.log("ingressos e pedido criados com sucesso")
 
         response.status(200).json({
         success: true,
@@ -61,6 +82,8 @@ route.post("/", async (request, response) => {
     catch(error){
 
         await transacao.rollback()
+
+        console.log(error)
 
         response.status(500).json({
         success: false,

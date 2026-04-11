@@ -23,6 +23,8 @@ async function assento_por_local_sessao(assento_local, sessao, opcoes ={}){
 
 async function modificar_assento(assento_id ,situacao_atualizada, opcoes ={}){
 
+    console.log("configurando as modificacoes de assento")
+
     const assento_escolhido = await assentos.findOne({where : {id : assento_id}}, opcoes)
 
     assento_escolhido.situacao = situacao_atualizada
