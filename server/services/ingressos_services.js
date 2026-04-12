@@ -19,11 +19,11 @@ async function ingresso_por_id(ingresso_id, opcoes = {}){
   
 }
 
-async function ingressos_por_usuario(usuario_id, opcoes = {}){
+async function ingressos_por_pedido(pedido_id, opcoes = {}){
 
   return assentos.findAll({
          where: { 
-            usuario_id : usuario_id 
+            pedido_id : pedido_id 
             }, 
         raw: true  
   },opcoes)
@@ -33,5 +33,5 @@ async function ingressos_por_usuario(usuario_id, opcoes = {}){
 module.exports = {
   criar_ingresso,
   ingresso_por_id,
-  ingressos_por_usuario
+  ingressos_por_pedido
 }

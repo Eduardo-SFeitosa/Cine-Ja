@@ -115,6 +115,7 @@ function Pagina_filmes() {
                     <span className="classificacao">{filme.classificacao} anos</span>
                     <span className="duracao">{filme.duracao} minutos</span>
                     <span className="genero">{filme.genero}</span>
+                    
                 </div>
             </header>
 

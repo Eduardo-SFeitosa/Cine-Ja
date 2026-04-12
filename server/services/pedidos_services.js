@@ -1,4 +1,4 @@
-const { pedido } = require("../models");
+const { pedido, ingresso, filmes, cinemas } = require("../models");
 
 async function criar_pedido(informacoes ,opcoes = {}) {
 
@@ -10,15 +10,21 @@ async function criar_pedido(informacoes ,opcoes = {}) {
 
 async function pedidos_por_usuario_id(usaurio_id, opcoes = {}) {
 
-  return pedidos.findAll({
+  return pedido.findAll({
 
     where: {
-      usaurio_id: usaurio_id,
-     },
-
-    raw: true,
-
-  }, opcoes)
+      usuario_id: usaurio_id,
+    },
+    include: [{
+      model: ingresso,
+      as: "ingressos",
+      include: [
+        { model: filmes, as: "filme_rel", attributes: ["titulo", "poster_url"] },
+        { model: cinemas, as: "cinema_rel", attributes: ["nome", "localizacao"] },
+      ],
+    }],
+    ...opcoes,
+  });
 
 }
 
@@ -29,6 +35,7 @@ async function modificar_situacao(pedido_id ,situacao_atualizada, opcoes ={}){
     pedido.situacao = situacao_atualizada
 
     await pedido.save()
+
 }
 
 module.exports = {

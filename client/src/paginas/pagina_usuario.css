@@ -5,3 +5,59 @@
     color: #f4f4f4;
     box-sizing: border-box;
 }
+
+.pagina-usuario .informacoes {
+    margin-bottom: 24px;
+}
+
+.pagina-usuario .nome-de-usuario {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.pagina-usuario .pedido-grupo {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.pagina-usuario .pedido-grupo-cabecalho h2 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+}
+
+.pagina-usuario .pedido-meta {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(244, 244, 244, 0.75);
+}
+
+.pagina-usuario .lista-ingressos-pedido {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+}
+
+.pagina-usuario .ingresso-item {
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pagina-usuario .ingresso-item:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+.pagina-usuario .ingresso-titulo {
+    margin: 0 0 6px;
+    font-weight: 600;
+}
+
+.pagina-usuario .ingresso-detalhes {
+    margin: 0;
+    font-size: 0.88rem;
+    color: rgba(244, 244, 244, 0.8);
+    line-height: 1.45;
+}
