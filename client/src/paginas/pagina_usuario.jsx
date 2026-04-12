@@ -9,6 +9,54 @@ function Pagina_usuario() {
 
     const [pedidos, set_pedidos] = useState(null);
     const [carregando, set_carregando] = useState(true);
+    const [pedido_pagando_id, set_pedido_pagando_id] = useState(null);
+    const [erro_pagamento, set_erro_pagamento] = useState(null);
+
+    const carregar_pedidos = (mostrar_carregamento = true) => {
+
+        if (mostrar_carregamento) {
+
+            set_carregando(true);
+
+        }
+
+        return fetch(`/api/pedidos/${usuario_id}`)
+
+            .then((resposta) => {
+
+                if (!resposta.ok) {
+
+                    throw new Error("pedidos do usuario nao foram recebidos");
+
+                }
+
+                return resposta.json();
+
+            })
+
+            .then((lista) => {
+
+                set_pedidos(Array.isArray(lista) ? lista : []);
+
+            })
+
+            .catch(() => {
+
+                set_pedidos([]);
+
+            })
+
+            .finally(() => {
+
+                if (mostrar_carregamento) {
+
+                    set_carregando(false);
+
+                }
+
+            });
+
+    };
 
     useEffect(() => {
 
@@ -64,20 +112,57 @@ function Pagina_usuario() {
 
     }, [usuario_id]);
 
+    const pagar_pedido = (pedido_id) => {
+
+        set_erro_pagamento(null);
+
+        set_pedido_pagando_id(pedido_id);
+
+        fetch(`/api/pedidos/${pedido_id}`, {
+
+            method: "PUT",
+
+            headers: {
+                "Content-Type": "application/json",
+            },
+
+        })
+
+            .then(async (resposta) => {
+
+                const corpo = await resposta.json().catch(() => ({}));
+
+                if (!resposta.ok) {
+
+                    throw new Error(corpo.message || "Não foi possível pagar o pedido");
+
+                }
+
+                return corpo;
+
+            })
+
+            .then(() => carregar_pedidos(false))
+
+            .catch((e) => {
+
+                set_erro_pagamento(e.message || "Erro ao pagar");
+
+            })
+
+            .finally(() => {
+
+                set_pedido_pagando_id(null);
+
+            });
+
+    };
 
     return (
 
         <div className="pagina-usuario">
 
             < Cabecalho />
-
-            <div className="informacoes">
-
-                <span className="nome-de-usuario"> Usuário #{usuario_id} </span>
-
-            </div>
-
-
 
             <div className="ingressos">
 
@@ -115,29 +200,29 @@ function Pagina_usuario() {
 
                             <ul className="lista-ingressos-pedido">
 
-                                {(pedido.ingressos || []).map((ing) => (
+                                {(pedido.ingressos || []).map((ingresso) => (
 
-                                    <li key={ing.id} className="ingresso-item">
+                                    <li key={ingresso.id} className="ingresso-item">
 
                                         <p className="ingresso-titulo">
 
-                                            {ing.filme_rel?.titulo ?? "Filme"}
+                                            {ingresso.filme_rel?.titulo ?? "Filme"}
 
                                         </p>
 
                                         <p className="ingresso-detalhes">
 
-                                            {ing.cinema_rel?.nome ?? "Cinema"}
+                                            {ingresso.cinema_rel?.nome ?? "Cinema"}
 
-                                            {ing.dia} às {ing.horario}
+                                            {ingresso.dia} às {ingresso.horario}
 
-                                            Sala {ing.sala} · Assento {ing.assento}
+                                            Sala {ingresso.sala} · Assento {ingresso.assento}
 
-                                            {ing.sessao_3d ? " 3D" : ""}
+                                            {ingresso.sessao_3d ? " 3D" : ""}
 
-                                            {ing.sala_mega ? " Mega" : ""}
+                                            {ingresso.sala_mega ? " Mega" : ""}
 
-                                            {ing.situacao}
+                                            {ingresso.situacao}
 
                                         </p>
 
@@ -146,6 +231,14 @@ function Pagina_usuario() {
                                 ))}
 
                             </ul>
+
+                            {pedido.situacao == "aguardando pagamento" ? 
+                            
+                            <button className="pagar" onClick={() => pagar_pedido(pedido.id)}>pagar pedido</button>:
+                            
+                            <></>}
+
+                            
 
                         </section>
 

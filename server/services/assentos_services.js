@@ -25,11 +25,16 @@ async function modificar_assento(assento_id ,situacao_atualizada, opcoes ={}){
 
     console.log("configurando as modificacoes de assento")
 
-    const assento_escolhido = await assentos.findOne({where : {id : assento_id}}, opcoes)
+    const assento_escolhido = await assentos.findOne({
+        where : { id : assento_id },
+        ...opcoes
+    })
+
+    if (!assento_escolhido) return null
 
     assento_escolhido.situacao = situacao_atualizada
 
-    await assento_escolhido.save()
+    await assento_escolhido.save(opcoes)
 }
 
 async function popular_sessao(sessao_id, opcoes = {}) {

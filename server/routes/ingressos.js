@@ -32,7 +32,7 @@ route.post("/", async (request, response) => {
         
         for (let ingresso = 0; ingresso < Object.keys(assentos_selecionados).length; ingresso ++){
 
-            const assento_id = await assentos_service.assento_por_local_sessao(assentos_selecionados[ingresso], sessao_selecionada, { transacao })
+            const assento_id = await assentos_service.assento_por_local_sessao(assentos_selecionados[ingresso], sessao_selecionada, { transaction: transacao })
 
             post_http_response.push(await ingressos_services.criar_ingresso({
 
@@ -62,7 +62,7 @@ route.post("/", async (request, response) => {
 
             console.log("ingresso adicionado a fila")
 
-            assentos_service.modificar_assento(assento_id.id, "reservado", { transacao })
+            await assentos_service.modificar_assento(assento_id.id, "reservado", { transaction: transacao })
 
             console.log("assento adicionado a fila")
 

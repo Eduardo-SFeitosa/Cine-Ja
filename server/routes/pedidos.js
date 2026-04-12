@@ -12,11 +12,24 @@ route.get("/:usuario_id", async (request, response) => {
   
 })
 
-route.put("/:pedido_id/:situacao_nova", async (request, response) => {
+route.put("/:pedido_id", async (request, response) => {
 
-  const pedido = await pedidos_services.modificar_situacao(request.params.pedido_id, request.params.situacao_nova)
+  try {
 
-  response.json(pedido)
+    const atualizado = await pedidos_services.pagar_pedido(request.params.pedido_id)
+
+    response.json(atualizado)
+
+  } catch (erro) {
+
+    const status = erro.status || 500
+
+    response.status(status).json({
+      success: false,
+      message: erro.message || "Erro ao pagar pedido",
+    })
+
+  }
 
 })
 
