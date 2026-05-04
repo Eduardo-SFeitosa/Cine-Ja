@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./janela_assentos.css";
 
+import { Link } from "react-router-dom"
+
 function Janela_assentos({ sessao, horario, sala_numero, filme, fechar_janela }) {
 
   const [assentos, set_assentos] = useState([]);
@@ -80,22 +82,35 @@ function Janela_assentos({ sessao, horario, sala_numero, filme, fechar_janela })
     <div className="janela_assentos">
       <div className="assentos">
 
+      {processo == "ingressos comprados"? (<div>
 
-    {processo == "ingressos comprados"? (<div>
+        <header className="assentos-cabecalho">
 
-      <h2>Ingressos comprados com sucesso</h2>
+          <div>
 
-      <button
+            <h2>Ingressos comprados com sucesso</h2>
+
+          </div>
+
+          <button
             type="button"
             className="assentos-fechar"
             onClick={fechar_janela}
           >
             ×
-        </button>
+          </button>
 
-    </div>)
-    
-    : processo == "carregado" ?
+          <main className="assento-conteudo">
+
+            <Link to={"/usuario/1"}> Pagar agora </Link>
+
+          </main>
+
+        </header>
+
+      </div>)
+      
+      : processo == "carregado" ?
     
       (<>
 

@@ -3,8 +3,6 @@ const assentos_service = require("./assentos_services");
 
 async function criar_pedido(informacoes ,opcoes = {}) {
 
-  console.log(informacoes)
-
   return pedido.create(informacoes, opcoes)
 
 }

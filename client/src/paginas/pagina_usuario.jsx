@@ -188,11 +188,9 @@ function Pagina_usuario() {
 
                                     <span>{pedido.situacao}</span>
 
-                                    {pedido.validade ? (
-
-                                        <span> · válido até {new Date(pedido.validade).toLocaleString()}</span>
-
-                                    ) : null}
+                                    {pedido.situacao == "aguardando pagamento" ?
+                                    <span> · válido até {new Date(pedido.validade).toLocaleString()}</span>
+                                    :<></>}
 
                                 </p>
 
@@ -212,17 +210,19 @@ function Pagina_usuario() {
 
                                         <p className="ingresso-detalhes">
 
-                                            {ingresso.cinema_rel?.nome ?? "Cinema"}
+                                            Cinema: {ingresso.cinema_rel?.nome ?? "Cinema"}
 
-                                            {ingresso.dia} às {ingresso.horario}
+                                            <br />
+
+                                            {new Date(ingresso.dia).toLocaleString()} às {ingresso.horario.replace(":00", "")}
+
+                                            <br />
 
                                             Sala {ingresso.sala} · Assento {ingresso.assento}
 
                                             {ingresso.sessao_3d ? " 3D" : ""}
 
                                             {ingresso.sala_mega ? " Mega" : ""}
-
-                                            {ingresso.situacao}
 
                                         </p>
 
