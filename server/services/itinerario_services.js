@@ -21,7 +21,7 @@ async function criar_itinerario() {
     console.log("criando itnerario")
 
     if (filmes.length < 15) {
-      console.log(await filmes_service.filmes_disponiveis({ transaction }))
+      await filmes_service.filmes_disponiveis({ transaction })
       throw new Error("filmes insuficientes");
     }
 

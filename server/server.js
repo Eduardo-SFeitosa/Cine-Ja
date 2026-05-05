@@ -1,5 +1,6 @@
 const express = require("express")
 const cors = require("cors")
+const cron = require("node-cron")
 
 const app = express()
 
@@ -56,7 +57,16 @@ async function iniciarServidorComBanco(tentativa = 1) {
 
       console.log(`servidor funcionando na porta ${porta}`)
 
+
+      //Atualizar itinerario
+
+      cron.schedule('*/1 * * * *', async () => {
+        console.log('callback fired');
+        console.log('Running a task every minute');
+      }, {recoverMissedExecutions: true})
+
     })
+
   } catch (error) {
     if (tentativa >= maxTentativas) {
       console.error("Não foi possível conectar ao banco após várias tentativas:", error)
@@ -70,6 +80,7 @@ async function iniciarServidorComBanco(tentativa = 1) {
 
     setTimeout(() => iniciarServidorComBanco(tentativa + 1), atrasoMs);
   }
+
 }
 
 async function checar_itinerario() {
@@ -98,4 +109,13 @@ async function checar_usuario() {
 
 }
 
+
+
+
+
+
+
 iniciarServidorComBanco();
+
+
+
