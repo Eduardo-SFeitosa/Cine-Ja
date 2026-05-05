@@ -1,0 +1,203 @@
+.pagina-pagamento {
+    min-height: 100vh;
+    padding: 24px;
+    background: radial-gradient(circle at top, #000000 0, #000000 60%);
+    color: #f4f4f4;
+    box-sizing: border-box;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.pagina-pagamento-resumo,
+.pagina-pagamento-metodos {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.pagina-pagamento-resumo h2,
+.pagina-pagamento-metodos h2 {
+    margin: 0 0 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(244, 244, 244, 0.9);
+}
+
+.pagina-pagamento-resumo-titulo {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.pagina-pagamento-resumo-detalhes {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(244, 244, 244, 0.8);
+    line-height: 1.5;
+}
+
+.pagina-pagamento-botoes-metodo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.pagina-pagamento-chip {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    color: #f4f4f4;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.pagina-pagamento-chip:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pagina-pagamento-chip.ativo {
+    border-color: rgba(200, 160, 80, 0.7);
+    background: rgba(200, 160, 80, 0.12);
+}
+
+.pagina-pagamento-qr {
+    text-align: center;
+    padding: 8px 0 24px;
+}
+
+.pagina-pagamento-qr-ajuda {
+    margin: 0 0 16px;
+    font-size: 0.9rem;
+    color: rgba(244, 244, 244, 0.75);
+}
+
+.pagina-pagamento-qr-placeholder {
+    display: inline-block;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    line-height: 0;
+}
+
+.pagina-pagamento-modal-fundo {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.pagina-pagamento-modal {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #121212;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.pagina-pagamento-modal-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px 0;
+}
+
+.pagina-pagamento-modal-cabecalho h2 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.pagina-pagamento-modal-fechar {
+    border: none;
+    background: transparent;
+    color: rgba(244, 244, 244, 0.75);
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+.pagina-pagamento-modal-fechar:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.pagina-pagamento-formulario-cartao {
+    padding: 16px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pagina-pagamento-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pagina-pagamento-campo span {
+    font-size: 0.82rem;
+    color: rgba(244, 244, 244, 0.7);
+}
+
+.pagina-pagamento-campo input {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.35);
+    color: #f4f4f4;
+    font-size: 1rem;
+}
+
+.pagina-pagamento-campo input:focus {
+    outline: none;
+    border-color: rgba(200, 160, 80, 0.5);
+}
+
+.pagina-pagamento-linha-cvv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.pagina-pagamento-msg {
+    margin: 0;
+    font-size: 0.88rem;
+}
+
+.pagina-pagamento-msg.erro {
+    color: #f88;
+}
+
+.pagina-pagamento-msg.ok {
+    color: #8d8;
+}
+
+.pagina-pagamento-submit-cartao {
+    margin-top: 4px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #c9a227 0%, #a08020 100%);
+    color: #111;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.pagina-pagamento-submit-cartao:hover {
+    filter: brightness(1.06);
+}
