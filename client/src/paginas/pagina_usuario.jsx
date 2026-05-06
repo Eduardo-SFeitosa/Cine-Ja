@@ -3,6 +3,8 @@ import './pagina_usuario.css';
 import { useParams } from 'react-router-dom';
 import Cabecalho from '../componentes/cabecalho';
 
+import Pagina_de_pagamento from '../componentes/janela_pagamento';
+
 function Pagina_usuario() {
 
     const { usuario_id } = useParams();
@@ -232,11 +234,13 @@ function Pagina_usuario() {
 
                             </ul>
 
+
+
                             {pedido.situacao == "aguardando pagamento" ? 
                             
-                            <button className="pagar" onClick={() => pagar_pedido(pedido.id)}>pagar pedido</button>:
+                            <button className="pagar" onClick={() => set_pedido_pagando_id(pedido.id)}>pagar pedido</button>
                             
-                            <></>}
+                            :<></>}
 
                             
 
@@ -247,6 +251,16 @@ function Pagina_usuario() {
                 )}
 
             </div>
+
+            {pedido_pagando_id != null ? 
+            
+            <Pagina_de_pagamento
+            
+            >
+
+            </Pagina_de_pagamento>:
+            
+            <></>}
 
 
         </div>

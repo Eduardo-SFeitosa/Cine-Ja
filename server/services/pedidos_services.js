@@ -7,6 +7,27 @@ async function criar_pedido(informacoes ,opcoes = {}) {
 
 }
 
+async function pedidos_por_pedido_id(pedido_id, opcoes = {}) {
+
+  return pedido.findOne({
+
+    where: {
+      id: pedido_id,
+    },
+    include: [{
+      model: ingresso,
+      as: "ingressos",
+      include: [
+        { model: filmes, as: "filme_rel", attributes: ["titulo", "poster_url"] },
+        { model: cinemas, as: "cinema_rel", attributes: ["nome", "localizacao"] },
+      ],
+    }],
+    order: [["id", "ASC"]],
+    ...opcoes,
+  });
+
+}
+
 async function pedidos_por_usuario_id(usaurio_id, opcoes = {}) {
 
   return pedido.findAll({
@@ -125,4 +146,5 @@ module.exports = {
     pedidos_por_usuario_id,
     modificar_situacao,
     pagar_pedido,
+    pedidos_por_pedido_id
 }

@@ -12,6 +12,14 @@ route.get("/:usuario_id", async (request, response) => {
   
 })
 
+route.get("/:pedido_id", async (request, response) => {
+
+  const pedido = await pedidos_services.pedidos_por_pedido_id(request.params.pedido_id)
+
+  response.json(pedido)
+  
+})
+
 route.put("/:pedido_id", async (request, response) => {
 
   try {

@@ -70,6 +70,52 @@ function formatar_numero_cartao(valor) {
 
 }
 
+const pagar_pedido = (pedido_id) => {
+
+        set_erro_pagamento(null);
+
+        set_pedido_pagando_id(pedido_id);
+
+        fetch(`/api/pedidos/${pedido_id}`, {
+
+            method: "PUT",
+
+            headers: {
+                "Content-Type": "application/json",
+            },
+
+        })
+
+            .then(async (resposta) => {
+
+                const corpo = await resposta.json().catch(() => ({}));
+
+                if (!resposta.ok) {
+
+                    throw new Error(corpo.message || "Não foi possível pagar o pedido");
+
+                }
+
+                return corpo;
+
+            })
+
+            .then(() => carregar_pedidos(false))
+
+            .catch((e) => {
+
+                set_erro_pagamento(e.message || "Erro ao pagar");
+
+            })
+
+            .finally(() => {
+
+                set_pedido_pagando_id(null);
+
+            });
+
+};
+
 function Pagina_de_pagamento({ informacoes_do_ingresso }) {
 
     const [metodo_pagamento, set_metodo_pagamento] = useState(null);
