@@ -17,6 +17,7 @@ const sessoes_route = require("./routes/sessoes")
 const ingressos_route = require("./routes/ingressos")
 const usuarios_route = require("./routes/usuarios")
 const pedidos_route = require("./routes/pedidos")
+const itinerario_route = require("./routes/itinerario")
 
 app.use(cors())
 app.use(express.json())
@@ -34,6 +35,8 @@ app.use("/ingressos", ingressos_route)
 app.use("/pedidos", pedidos_route)
 
 app.use("/usuarios", usuarios_route)
+
+app.use("/itinerario", itinerario_route)
 
 async function iniciarServidorComBanco(tentativa = 1) {
 
@@ -108,12 +111,6 @@ async function checar_usuario() {
   return true
 
 }
-
-
-
-
-
-
 
 iniciarServidorComBanco();
 

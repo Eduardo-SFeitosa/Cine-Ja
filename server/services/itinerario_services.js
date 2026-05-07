@@ -124,6 +124,8 @@ async function criar_itinerario() {
 
       console.log("itinerario criado")
 
+      return "criado com sucesso"
+
   }catch (error) {
     
     await transaction.rollback();
