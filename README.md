@@ -28,6 +28,9 @@ Projeto feito utilizando React, Node.js e MySQL.
 - MySQL
 - CORS
 
+### Bibliotecas externas
+- Cron ( para agendamento de funções )
+
 
 # Estrutura do projeto
 
