@@ -11,6 +11,4 @@ route.get("/", async (request, response) => {
 
 })
 
-
-
 module.exports = route;
