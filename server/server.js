@@ -63,7 +63,7 @@ async function iniciarServidorComBanco(tentativa = 1) {
 
       //Atualizar itinerario
 
-      cron.schedule('*/1 * * * *', async () => {
+      cron.schedule('0 0 * * 4', async () => {
         console.log('callback fired');
         console.log('Running a task every minute');
       }, {recoverMissedExecutions: true})

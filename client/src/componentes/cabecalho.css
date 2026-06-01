@@ -24,16 +24,16 @@
     justify-content: center;
     gap: 20%;
 
-    .cabecalho-botao{
+}
 
-        width: fit-content;
-        height: fit-content;
-        padding: 1%;
-        color: white;
-        background: rgb(151, 23, 49);
-        border-radius: 15px;
-        border: 1px solid white;
+.botoes .cabecalho-botao {
 
-    }
+    width: fit-content;
+    height: fit-content;
+    padding: 1%;
+    color: white;
+    background: rgb(151, 23, 49);
+    border-radius: 15px;
+    border: 1px solid white;
 
 }

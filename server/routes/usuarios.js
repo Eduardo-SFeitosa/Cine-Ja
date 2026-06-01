@@ -8,6 +8,8 @@ route.post("/", async (request, response) => {
 
   const usuario = await usuario_services.criar_usuario(request.body)
 
+  console.log("usuraio criado com as informacoes", usuario)
+
   response.json(usuario)
   
 })

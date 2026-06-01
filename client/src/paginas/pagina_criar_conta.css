@@ -1,0 +1,35 @@
+.tela-criar-conta {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #0b0b0b 0%, #121212 100%);
+  color: #ffffff;
+}
+
+.conteudo-criar-conta {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.criar-conta-panel {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 32px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 640px) {
+  .conteudo-criar-conta {
+    padding: 20px;
+  }
+
+  .criar-conta-panel {
+    padding: 24px;
+  }
+}
