@@ -3,29 +3,32 @@ import "./cabecalho.css"
 
 import { Link } from "react-router-dom"
 
+import Criar_conta from "./usuario/criar_conta"
+
+import { useState } from "react"
+
 export default function Cabecalho() {
 
-    const resetar_itinerario = () => {
-
-        fetch("api/itinerario")
-
-        .then(resposta = resposta.json)
-
-        .then(console.log(resposta))
-
-    }
+    const [usuario_logado, set_logado] = useState(false)
+    const [componente_login, set_componente_login] = useState(false)
 
     return (
     
-        <header className="cabecalho">
+        <header className="cabecalho-geral">
 
-            <Link to={"/"}> Inicio </Link>
+            <h1>Cine Já</h1>
 
-            <h1>Cine Já</h1> <Link to={"/usuario/1"}> conta </Link>
+            <div className="botoes">
 
-            <h3 onClick={() => { resetar_itinerario }} > RESETAR ITINERARIO </h3>
+                <Link to={"/"} className="cabecalho-botao"> Inicio </Link>
 
+                <Link to={"/usuario/1"}className="cabecalho-botao"> conta </Link>
 
+                <button onClick={() => set_componente_login(true)}>Criar Conta</button>
+
+                { componente_login ? <Criar_conta/> : null}
+
+            </div>
 
         </header>
         
