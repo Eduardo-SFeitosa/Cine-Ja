@@ -1,4 +1,5 @@
 const { usuarios } = require("../models");
+const bcrypt = require('bcrypt');
 
 async function modificar_usuario(usuario_id, novas_informacoes , opcoes = {}) {
 
@@ -45,9 +46,22 @@ async function checar_usaurio_base(opcoes = {}) {
 
 }
 
+async function autenticar_usuario(email, senha) {
+
+  const usuario = await usuarios.findOne({ where: { email } })
+
+  if (!usuario) return null
+  
+  const senha_valida = await  bcrypt.compare(senha, usuario.senha)
+
+  return senha_valida ? usuario : null
+
+}
+
 module.exports = {
   criar_usuario,
   deletar_usuario,
   modificar_usuario,
   checar_usaurio_base,
+  autenticar_usuario,
 }
