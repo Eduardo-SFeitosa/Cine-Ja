@@ -63,22 +63,21 @@ async function iniciarServidorComBanco(tentativa = 1) {
 
       //Atualizar itinerario
 
-      cron.schedule('*/1 * * * *', async () => {
-        console.log('callback fired');
-        console.log('Running a task every minute');
+      cron.schedule('* * * * 3', async () => {
+        await itinerario_services.criar_itinerario()
       }, {recoverMissedExecutions: true})
 
     })
 
   } catch (error) {
     if (tentativa >= maxTentativas) {
-      console.error("Não foi possível conectar ao banco após várias tentativas:", error)
+      console.error("Não foi possível conectar")
       process.exit(1);
     }
 
     console.warn(
-      `Falha ao conectar ao banco (tentativa ${tentativa}/${maxTentativas}). ` +
-      `Tentando novamente em ${atrasoMs / 1000} segundos...`
+      `Falha ao conectar ao banco. ` +
+      `Tentando novamente em ${atrasoMs} segundos...`
     );
 
     setTimeout(() => iniciarServidorComBanco(tentativa + 1), atrasoMs);

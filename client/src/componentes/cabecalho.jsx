@@ -9,9 +9,9 @@ export default function Cabecalho() {
 
         fetch("api/itinerario")
 
-        .then(resposta = resposta.json)
+        .then((resposta) => resposta.json)
 
-        .then(console.log(resposta))
+        .then((resposta) => console.log(resposta))
 
     }
 
@@ -23,8 +23,7 @@ export default function Cabecalho() {
 
             <h1>Cine Já</h1> <Link to={"/usuario/1"}> conta </Link>
 
-            <h3 onClick={() => { resetar_itinerario }} > RESETAR ITINERARIO </h3>
-
+            <button onClick={() => resetar_itinerario()} > RESETAR ITINERARIO </button>
 
 
         </header>
