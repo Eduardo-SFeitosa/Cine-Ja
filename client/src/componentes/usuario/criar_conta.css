@@ -1,0 +1,100 @@
+.criar-conta-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.criar-conta-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.criar-conta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.form-group input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group input:disabled {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+}
+
+.mensagem-erro {
+  color: #d32f2f;
+  font-size: 14px;
+  padding: 10px;
+  background-color: #ffebee;
+  border-left: 4px solid #d32f2f;
+  border-radius: 4px;
+  margin: 0;
+}
+
+.mensagem-sucesso {
+  color: #388e3c;
+  font-size: 14px;
+  padding: 10px;
+  background-color: #e8f5e9;
+  border-left: 4px solid #388e3c;
+  border-radius: 4px;
+  margin: 0;
+}
+
+.btn-enviar {
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-enviar:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.btn-enviar:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.btn-enviar:active:not(:disabled) {
+  transform: translateY(0);
+}

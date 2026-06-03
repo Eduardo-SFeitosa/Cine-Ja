@@ -63,8 +63,14 @@ async function iniciarServidorComBanco(tentativa = 1) {
 
       //Atualizar itinerario
 
+<<<<<<< HEAD
       cron.schedule('* * * * 3', async () => {
         await itinerario_services.criar_itinerario()
+=======
+      cron.schedule('0 0 * * 4', async () => {
+        console.log('callback fired');
+        console.log('Running a task every minute');
+>>>>>>> 3faf845b78ecbd9374817c158d75fa4a92daab57
       }, {recoverMissedExecutions: true})
 
     })
@@ -87,7 +93,23 @@ async function iniciarServidorComBanco(tentativa = 1) {
 
 async function checar_itinerario() {
 
-  const sessoes_disponiveis = await sessoes_services.sessoes_existentes()
+  const filmes_disponiveis = await sessoes_services.filmes_em_cartaz()
+
+  if (filmes_disponiveis.length <= 0){
+
+    await itinerario_services.criar_itinerario()
+
+    console.log("itinerario criado")
+
+    return true
+
+  }
+
+  const filme_id = filmes_disponiveis[0]["filme_rel.id"]
+  
+  const data_hoje = new Date().toISOString().slice(0, 10)
+  
+  const sessoes_disponiveis = await sessoes_services.sessoes_por_filme_id(filme_id, data_hoje)
 
   if (sessoes_disponiveis.length <= 0) {
 

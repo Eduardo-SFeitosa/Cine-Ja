@@ -1,15 +1,19 @@
 # Cine Já
 
-Cine Já é uma aplicação full stack que consome REST API para informar ao usuario filmes e sessoes disponiveis.
+Cine Já é uma aplicação full stack que consome uma REST API para informar ao usuário filmes e sessões disponíveis, permitindo a compra de ingressos com seleção de assentos.
 
 Projeto feito utilizando React, Node.js e MySQL.
 
 ## Funcionalidades
 - Listagem de filmes consumindo uma API REST
 - Exibição de pôster, título, duração, gênero e classificação indicativa
-- Sistema de login e usuário
+- Compra de ingressos com seleção de assentos e geração de pedidos
+- Gerenciamento de pedidos e atualização de status de pagamento
+- Cadastro, edição e exclusão de usuários
+- Criação automática de itinerário de filmes (agendamento)
+- Administração: criação de filmes, cinemas e sessões via API
 - Componentes reutilizáveis no frontend
-- Backend com rotas separadas
+- Backend com rotas separadas e operações transacionais
 - Banco de dados MySQL
 
 ## Tecnologias Utilizadas
@@ -24,21 +28,23 @@ Projeto feito utilizando React, Node.js e MySQL.
 ### Backend
 - Node.js
 - Express
-- Sequelize
+- Sequelize (com transações)
 - MySQL
 - CORS
 
+### Bibliotecas externas
+- node-cron (para agendamento de funções)
 
 # Estrutura do projeto
 
 ## Front-end
-Páginas e componentes auxiliares que a aplicação utiliza para interfaces de usuario
+Páginas e componentes auxiliares que a aplicação utiliza para interfaces de usuário.
 
 ### Páginas
 - [Página Inicial](#pagina-inicial) 
 - [Página de Filmes](#pagina-de-filmes) 
 
-### Componentes reutilizaveis
+### Componentes reutilizáveis
 - [Miniatura](#miniatura) 
 
 ## Back-end
@@ -46,12 +52,23 @@ Rotas das APIs utilizadas pela aplicação.
 
 ### APIs
 - [/filmes](#/filmes)
-- [/filmes/:filme](#/filmes/:titulo)
-- [/sessoes/:filme](#/sessoes/:filme)
-- [/sessoes/:filme/:dia](#/sessoes/:filme/:dia)
-- [/assentos/:sessao](#/assentos/:sessao)
+- [/filmes/:id](#/filmesid)
+- [/sessoes](#/sessoes)
+- [/sessoes/:filme_id/:dia](#/sessoesfilme_iddia)
+- [/assentos/:sessao_id](#/assentossessao_id)
+- [/assentos/:id/:situacao](#/assentosidsituacao)
 - [/cinemas](#/cinemas)
-- [/sessoes/:nome](#/cinemas/:nome)
+- [/cinemas/:nome](#/cinemasnome)
+- [/ingressos](#/ingressos)
+- [/ingressos/:ingresso_id](#/ingressosingresso_id)
+- [/ingressos/usuario/:usuario_id](#/ingressosusuariousuario_id)
+- [/pedidos](#/pedidos)
+- [/pedidos/:usuario_id](#/pedidosusuario_id)
+- [/pedidos/pedido/:pedido_id](#/pedidospedidopedido_id)
+- [/pedidos/:pedido_id](#/pedidospedido_id)
+- [/usuarios](#/usuarios)
+- [/usuarios/:usuario_id](#/usuariosusuario_id)
+- [/itinerario](#/itinerario)
 
 ## Banco de dados
 Tabelas utilizadas para armazenar os dados.
@@ -60,97 +77,169 @@ Tabelas utilizadas para armazenar os dados.
 - [usuarios-db](#usuarios-db) 
 - [filmes-db](#filmes-db)
 - [cinemas-db](#cinemas-db)
-- [sessões-disponiveis-db](#sessões-disponiveis-db)
+- [sessoes-disponiveis-db](#sessoes-disponiveis-db)
 - [assentos-db](#assentos-db)
 - [ingressos-db](#ingressos-db)
+- [pedidos-db](#pedidos-db)
 
 # pagina-inicial
 Página principal do projeto que atua como home page.
-Usa um fetch para pesquisar todos os filmes disponiveis então utiliza [Miniatura](#Miniatura) para criar as miniaturas de todos os filmes do catalogo.
+Usa um fetch para pesquisar todos os filmes disponíveis e então utiliza [Miniatura](#miniatura) para criar as miniaturas de todos os filmes do catálogo.
 
 # pagina-de-filmes
-Uma página especifica para um filme que mostra todas as informações do filme usando [/filmes/:titulo](#/filmes/:titulo) e em quais cinemas está disponivel e em quais hórarios usando [/sessoes/:titulo](#/sessoes/:titulo).
+Uma página específica para um filme que mostra todas as informações do filme usando [/filmes/:id](#/filmesid) e em quais cinemas está disponível e em quais horários usando [/sessoes/:filme_id/:dia](#/sessoesfilme_iddia).
 
 # miniatura
-Componente React que recebe nome, capa, duração, classificação indicativa e genero e retorna um elemento \<link\>\<\/link\> de um filme que caso seja clicado leva o usuario para a [Página de Filmes](#Pagina-de-Filmes) do filme escolhido
+Componente React que recebe nome, capa, duração, classificação indicativa e gênero e retorna um elemento `<link></link>` de um filme que, caso seja clicado, leva o usuário para a [Página de Filmes](#pagina-de-filmes) do filme escolhido.
 
 # /filmes
-.get() que pesquisa a [filmes-db](#filmes-db) e retorna todos os filmes que tiverem o valor booleano __ativo__ como verdadeiro e retorna os filmes encontrados
+`GET /` – pesquisa a [filmes-db](#filmes-db) e retorna todos os filmes cadastrados.  
+`POST /` – cria um novo filme a partir dos dados enviados no corpo da requisição.
 
-# /filmes/:titulo
-.get() que pesquisa a [filmes-db](#filmes-db) e retorna o filme que possui o valor __titulo__ igual ao passado na url
+# /filmes/:id
+`GET /:id` – pesquisa a [filmes-db](#filmes-db) e retorna o filme cujo **id** é igual ao passado na URL.
 
-# /sessoes/:titulo
-.get() que pesquisa todas as sessões da [sessões-disponiveis-db](#sessões-disponiveis-db) e retorna aquelas que possuem o valor __filme__ igual ao titulo passado na url
+# /sessoes
+`GET /` – retorna uma lista de filmes em cartaz com informações agregadas das sessões disponíveis.  
+`POST /` – cria uma nova sessão com os dados fornecidos.
 
-# /sessoes/:filme/:dia
-.get que pesquisa todas as sessoes da [sessões-disponiveis-db](#sessões-disponiveis-db) e retorna aquelas com __filme__ e __dia__ iguais as informadas na url
+# /sessoes/:filme_id/:dia
+`GET /:filme_id/:dia` – pesquisa a [sessoes-disponiveis-db](#sessoes-disponiveis-db) e retorna todas as sessões que possuem **filme_id** e **dia** iguais aos informados na URL.
 
-# /assentos/:sessao
-.get() que passa todas os assentos da [assentos-db](#assentos-db) que possui a __sessao__ informada na url
+# /assentos/:sessao_id
+`GET /:sessao_id` – retorna todos os assentos da [assentos-db](#assentos-db) que pertencem à sessão identificada por **sessao_id**.
+
+# /assentos/:id/:situacao
+`PUT /:id/:situacao` – modifica a situação de um assento específico (por exemplo, “disponível”, “reservado” ou “vendido”).
+
+# /cinemas
+`GET /` – retorna todos os cinemas cadastrados na [cinemas-db](#cinemas-db).  
+`POST /` – cria um novo cinema.
+
+# /cinemas/:nome
+`GET /:nome` – retorna os dados do cinema cujo **nome** corresponde ao valor passado na URL.
+
+# /ingressos
+`POST /` – realiza a compra de ingressos. Recebe os assentos selecionados e os dados da sessão, cria um pedido e os ingressos correspondentes dentro de uma transação. Atualiza a situação dos assentos para “reservado”.
+
+# /ingressos/:ingresso_id
+`GET /:ingresso_id` – retorna os detalhes de um ingresso específico.
+
+# /ingressos/usuario/:usuario_id
+`GET /usuario/:usuario_id` – retorna todos os ingressos associados a um usuário.
+
+# /pedidos
+`POST /` – cria um novo pedido.
+
+# /pedidos/:usuario_id
+`GET /:usuario_id` – retorna todos os pedidos de um usuário.
+
+# /pedidos/pedido/:pedido_id
+`GET /pedido/:pedido_id` – retorna um pedido específico pelo seu ID (endpoint alternativo).
+
+# /pedidos/:pedido_id
+`PUT /:pedido_id` – atualiza o status de um pedido para “pago”, efetivando a compra.
+
+# /usuarios
+`POST /` – cria um novo usuário com **usuario** e **senha**.
+
+# /usuarios/:usuario_id
+`PUT /:usuario_id` – modifica os dados (nome de usuário e/ou senha) do usuário identificado.  
+`DELETE /:usuario_id` – remove o usuário do banco de dados.
+
+# /itinerario
+`GET /` – executa uma rotina agendada que cria/atualiza o itinerário de filmes (por exemplo, gerando sessões para a semana).
 
 # usuarios-db
-É utilizado como Foreign Key na tabela [ingressos-db](#ingressos-db)
+Armazena informações dos usuários da aplicação:
+- `id` – identificador único (chave primária)
+- `usuario` – nome utilizado para login
+- `senha` – senha (armazenada com hash)
 
-Armazena informações sobre usuários da aplicação com as seguintes informações 
-- `usuario` - nome utilizado para login do usuário 
-- `senha` - senha utilizada para login do usuário 
+**Relacionamentos:**
+- Um usuário pode ter vários ingressos (`hasMany` ingresso)
+- Um usuário pode ter vários pedidos (`hasMany` pedido)
 
 # filmes-db
-É utilizado como Foreign Key nas tabelas [sessões-disponiveis-db](#sessões-disponiveis-db) e [ingressos-db](#ingressos-db)
+Armazena todos os filmes do site:
+- `id` – identificador único
+- `titulo` – nome do filme
+- `poster_url` – URL da imagem do pôster
+- `duracao` – duração total do filme
+- `classificacao` – classificação indicativa (valor numérico, ex: Livre a +18)
+- `genero` – gêneros (ex.: comédia, ação)
+- `atores` – principais atores
+- `diretor` – diretor principal
+- `descricao` – sinopse do filme
+- `lancamento` – data de lançamento (tipo `DATEONLY`)
 
-Armazena todos os filmes do site guardando as seguintes informações de cada filme
-- `titulo` — nome do filme
-- `poster_url` — URL da imagem do pôster
-- `duracao` — duração total do filme
-- `classificacao` — classificação indicativa de Livre até +18
-- `genero` — gêneros como comédia, ação e aventura
-- `atores` — principais atores do filme
-- `diretor` — diretor principal
-- `descricao` — sinopse do filme
-- `lancamento` — data de lançamento
-- `ativo` — define se o filme está disponível no catálogo
+**Relacionamentos:**
+- Um filme pode estar em várias sessões (`hasMany` sessoes)
+- Um filme pode ter vários ingressos vendidos (`hasMany` ingresso)
 
 # cinemas-db
-É utilizado como Foreign Key nas tabelas [sessões-disponiveis-db](#sessões-disponiveis-db) e [ingressos-db](#ingressos-db)
+Armazena os cinemas parceiros:
+- `id` – identificador único
+- `nome` – nome do cinema
+- `localizacao` – endereço ou região
+- `salas_total` – número total de salas (tipo `TINYINT`)
+- `salas_mega` – número de salas mega (tipo `TINYINT`)
 
-Armazena todos os cinemas do site guardando as seguintes informações de cada filme
-- `nome` - nome do cinema
-- `localizacao` - local onde o cinema se encontra
-- `salas total` - número total de salas que o cinema possui
-- `salas mega` - número de salas mega que o cinema possui
+**Relacionamentos:**
+- Um cinema pode ter várias sessões (`hasMany` sessoes)
+- Um cinema pode ter vários ingressos vendidos (`hasMany` ingresso)
 
-# sessões-disponiveis-db
-É utilizado como Foreign Key na tabela [assentos-db](#assentos-db)
+# sessoes-disponiveis-db
+Conecta filmes e cinemas, formando as sessões:
+- `id` – identificador único
+- `sala` – número da sala
+- `dia` – dia da sessão (tipo `DATEONLY`)
+- `horario` – horário da sessão (tipo `TIME`)
+- `sessao_3d` – booleano indicando se a sessão é em 3D
+- `sala_mega` – booleano indicando se a sala é mega
+- `filme_id` – referência a [filmes-db](#filmes-db)
+- `cinema_id` – referência a [cinemas-db](#cinemas-db)
 
-Conecta as base de dados [filmes-db](#filmes-db) e [cinemas-db](#cinemas-db) ligando filmes a salas especificas do cinema para criar sessões
-contem as seguinte informações de cada sessão
-- `cinema` - Foreign Key de [cinemas-db](#cinemas-db)
-- `sala` - numero da sala da sessão
-- `filme` - Foreign Key de [filmes-db](#filmes-db)
-- `dia` - o dia da semana em que a sessão sera apresentada 
-- `horario` - qual o horario da sessão
-- `3d` - define se a sessão sera em 3d
-- `mega` - define se a sala da sessão sera mega
+**Relacionamentos:**
+- Uma sessão pertence a um filme (`belongsTo` filmes)
+- Uma sessão pertence a um cinema (`belongsTo` cinemas)
+- Uma sessão possui vários assentos (`hasMany` assentos)
 
 # assentos-db
-Aplicação utiliza a FK __sessao__ para ordenar assentos a suas respectivas sessões
+Armazena os assentos de cada sessão:
+- `id` – identificador único
+- `local` – localização do assento (ex.: A12, G02)
+- `situacao` – estado do assento: “disponível”, “reservado” ou “vendido”
+- `sessao_id` – referência a [sessoes-disponiveis-db](#sessoes-disponiveis-db)
 
-Armazena as informações de cada assento de uma sessão contendo as seguintes informações
-- `sessao` - Foreign key de [sessões-disponiveis-db](#sessões-disponiveis-db) 
-- `local` - localização do assento na sala utilizando letras A-Z fileiras e números como colunas como A12 e G02
-- `situacao` - Informação se o assento está vendido, foi escolhido ou se está disponivel 
+**Relacionamentos:**
+- Um assento pertence a uma sessão (`belongsTo` sessoes)
 
 # ingressos-db
-Armazena os ingressos comprados pelo usuario guardando as seguintes informações
-- `usuario` - Foreign Key de [usuarios](#usuarios) que comprou o ingresso
-- `cinema` - Foreign Key de [cinemas-db](#cinemas-db)
-- `sala` - numero da sala da sessão
-- `assento` - assento escolhido pelo usuario
-- `filme` - Foreign Key de [filmes-db](#filmes-db)
-- `dia` - o dia da semana em que a sessão sera apresentada 
-- `horario` - qual o horario da sessão
-- `3d` - define se a sessão sera em 3d
-- `mega` - define se a sala da sessão sera mega
+Registra cada ingresso adquirido:
+- `id` – identificador único
+- `sala` – número da sala
+- `assento` – local do assento escolhido
+- `dia` – dia da sessão (tipo `DATEONLY`)
+- `horario` – horário da sessão (tipo `TIME`)
+- `sessao_3d` – se a sessão é 3D
+- `sala_mega` – se a sala é mega
+- `situacao` – status do ingresso (“aguardando pagamento”, “pago”, etc.)
+- `pedido_id` – referência a [pedidos-db](#pedidos-db)
+- `filme_id` – referência a [filmes-db](#filmes-db)
+- `cinema_id` – referência a [cinemas-db](#cinemas-db)
+- `usuario_id` – referência a [usuarios-db](#usuarios-db)
 
+**Relacionamentos:**
+- Um ingresso pertence a um filme, cinema, usuário e pedido (`belongsTo` respectivas tabelas)
 
+# pedidos-db
+Agrupa os ingressos de uma compra:
+- `id` – identificador único
+- `situacao` – status do pedido (“aguardando pagamento”, “pago”, etc.)
+- `validade` – data/hora de expiração do pedido (default: 2 horas após criação)
+- `usuario_id` – referência a [usuarios-db](#usuarios-db)
+
+**Relacionamentos:**
+- Um pedido pertence a um usuário (`belongsTo` usuarios)
+- Um pedido pode conter vários ingressos (`hasMany` ingresso)
