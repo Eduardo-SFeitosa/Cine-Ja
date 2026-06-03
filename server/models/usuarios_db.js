@@ -16,29 +16,45 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(255),
             allowNull : false
         },
+        pergunta_seguranca : {
+            type: DataTypes.STRING(255),
+            allowNull : false
+        },
+        resposta_seguranca : {
+            type: DataTypes.STRING(255),
+            allowNull : false
+        },
 
     },
     {
-        //esconde o campo senha
+        //esconde campos 
         defaultScope: {
         attributes: {
-            exclude: ["senha"]
+            exclude: ["senha", "resposta_seguranca"]
         }
         },
 
 
-        //AUTOMATICAMENTE CRIPTOGRAFA SENHAS DE USUARIO QUANDO SALVA OU MODIFICADA
+        //AUTOMATICAMENTE CRIPTOGRAFA SENHA E RESPOSTA DE SEGURANCA QUANDO SALVA OU MODIFICADA
         hooks: {
         beforeCreate: async (usuario) => {
             if (usuario.senha) {
             const salt = await bcrypt.genSalt(10);
             usuario.senha = await bcrypt.hash(usuario.senha, salt);
             }
+            if (usuario.resposta_seguranca) {
+            const salt = await bcrypt.genSalt(10);
+            usuario.resposta_seguranca = await bcrypt.hash(usuario.resposta_seguranca, salt);
+            }
         },
         beforeUpdate: async (usuario) => {
             if (usuario.changed('senha')) {
             const salt = await bcrypt.genSalt(10);
             usuario.senha = await bcrypt.hash(usuario.senha, salt);
+            }
+            if (usuario.changed('resposta_seguranca')) {
+            const salt = await bcrypt.genSalt(10);
+            usuario.resposta_seguranca = await bcrypt.hash(usuario.resposta_seguranca, salt);
             }
         }
         },

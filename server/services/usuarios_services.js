@@ -36,7 +36,13 @@ async function checar_usaurio_base(opcoes = {}) {
 
   if (!usuario_base) {
 
-    await criar_usuario({usuario : "usuario_base", senha : "123"})
+    await criar_usuario({
+      usuario: "usuario_base",
+      email: "usuario_base@cineja.local",
+      senha: "123",
+      pergunta_seguranca: "Qual o nome da sua mãe?",
+      resposta_seguranca: "base",
+    })
 
     console.log("usuario base criado")
 

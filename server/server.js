@@ -63,14 +63,9 @@ async function iniciarServidorComBanco(tentativa = 1) {
 
       //Atualizar itinerario
 
-<<<<<<< HEAD
-      cron.schedule('* * * * 3', async () => {
-        await itinerario_services.criar_itinerario()
-=======
       cron.schedule('0 0 * * 4', async () => {
         console.log('callback fired');
         console.log('Running a task every minute');
->>>>>>> 3faf845b78ecbd9374817c158d75fa4a92daab57
       }, {recoverMissedExecutions: true})
 
     })

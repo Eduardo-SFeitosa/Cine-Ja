@@ -7,6 +7,8 @@ export default function Pagina_criar_conta() {
     const [nomeUsuario, setNomeUsuario] = useState("")
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
+    const [perguntaSeguranca, setPerguntaSeguranca] = useState("")
+    const [respostaSeguranca, setRespostaSeguranca] = useState("")
     const [mensagem, setMensagem] = useState("")
     const [erro, setErro] = useState("")
     const [carregando, setCarregando] = useState(false)
@@ -33,6 +35,14 @@ export default function Pagina_criar_conta() {
       setErro("A senha deve ter no mínimo 6 caracteres")
       return
     }
+    if (!perguntaSeguranca.trim()) {
+      setErro("Selecione uma pergunta de segurança")
+      return
+    }
+    if (!respostaSeguranca.trim()) {
+      setErro("A resposta de segurança é obrigatória")
+      return
+    }
 
     setCarregando(true)
 
@@ -46,6 +56,8 @@ export default function Pagina_criar_conta() {
           usuario: nomeUsuario,
           email: email,
           senha: senha,
+          pergunta_seguranca: perguntaSeguranca,
+          resposta_seguranca: respostaSeguranca,
         }),
       })
 
@@ -58,6 +70,8 @@ export default function Pagina_criar_conta() {
       setNomeUsuario("")
       setEmail("")
       setSenha("")
+      setPerguntaSeguranca("")
+      setRespostaSeguranca("")
     } catch (err) {
       setErro(err.message || "Erro ao criar conta. Tente novamente.")
     } finally {
@@ -105,6 +119,34 @@ export default function Pagina_criar_conta() {
                     value={senha}
                     onChange={(e) => setSenha(e.target.value)}
                     placeholder="Digite sua senha"
+                    disabled={carregando}
+                />
+                </div>
+
+                <div className="form-group">
+                <label htmlFor="perguntaSeguranca">Pergunta de Segurança:</label>
+                <select
+                    id="perguntaSeguranca"
+                    value={perguntaSeguranca}
+                    onChange={(e) => setPerguntaSeguranca(e.target.value)}
+                    disabled={carregando}
+                >
+                    <option value="">Selecione uma pergunta</option>
+                    <option value="Qual o nome da sua mãe?">Qual o nome da sua mãe?</option>
+                    <option value="Qual o nome do seu primeiro animal de estimação?">Qual o nome do seu primeiro animal de estimação?</option>
+                    <option value="Em qual cidade você nasceu?">Em qual cidade você nasceu?</option>
+                    <option value="Qual o nome da sua escola primária?">Qual o nome da sua escola primária?</option>
+                </select>
+                </div>
+
+                <div className="form-group">
+                <label htmlFor="respostaSeguranca">Resposta de Segurança:</label>
+                <input
+                    type="password"
+                    id="respostaSeguranca"
+                    value={respostaSeguranca}
+                    onChange={(e) => setRespostaSeguranca(e.target.value)}
+                    placeholder="Digite a resposta da pergunta escolhida"
                     disabled={carregando}
                 />
                 </div>
