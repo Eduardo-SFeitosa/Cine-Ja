@@ -18,6 +18,7 @@ const ingressos_route = require("./routes/ingressos")
 const usuarios_route = require("./routes/usuarios")
 const pedidos_route = require("./routes/pedidos")
 const itinerario_route = require("./routes/itinerario")
+const cinema_favorito_route = require("./routes/cinema_favorito")
 
 app.use(cors())
 app.use(express.json())
@@ -37,6 +38,8 @@ app.use("/pedidos", pedidos_route)
 app.use("/usuarios", usuarios_route)
 
 app.use("/itinerario", itinerario_route)
+
+app.use("/cinema-favorito", cinema_favorito_route)
 
 async function iniciarServidorComBanco(tentativa = 1) {
 
