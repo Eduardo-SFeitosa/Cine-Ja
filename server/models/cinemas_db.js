@@ -38,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: "cinema_id",
             as: "ingressos"
         })
+
+        cinemas.hasMany(models.cinema_favorito, {
+            foreignKey: "cinema_id",
+            as: "favoritos"
+        })
     }
 
     return cinemas
