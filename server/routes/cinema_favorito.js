@@ -3,6 +3,16 @@ const route = express.Router()
 
 const cinema_favorito_services = require("../services/cinema_favorito_services")
 
+route.get("/usuario/:usuario_id", async (request, response) => {
+
+  const favoritos = await cinema_favorito_services.listar_por_usuario_id(
+    request.params.usuario_id
+  )
+
+  response.json(favoritos)
+
+})
+
 route.post("/", async (request, response) => {
 
   try {

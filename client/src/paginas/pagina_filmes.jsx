@@ -4,6 +4,8 @@ import './pagina_filmes.css';
 import Cabecalho from '../componentes/cabecalho.jsx';
 import Janela_assentos from '../componentes/janela_assentos.jsx';
 
+const USUARIO_ID = 1;
+
 const organizar_sessoes_por_sala = (sessoes) => {
 
     const cinemas_ids = [...new Set(sessoes.map((sessao) => { return sessao.cinema_id }))]
@@ -45,6 +47,8 @@ function Pagina_filmes() {
     const [filme, set_filme] = useState(null);
     const [sessao_selecionada, set_sessao_selecionada] = useState(null);
     const [sessoes, set_sessoes] = useState({})
+    const [favoritos_por_cinema, set_favoritos_por_cinema] = useState({})
+    const [favorito_carregando, set_favorito_carregando] = useState(null)
 
     //coleta as informações do filme utilizando a id da url
     useEffect(() => {
@@ -81,6 +85,81 @@ function Pagina_filmes() {
             })
     }, [])
 
+    useEffect(() => {
+
+        fetch(`/api/cinema-favorito/usuario/${USUARIO_ID}`)
+            .then((response) => response.json())
+            .then((favoritos) => {
+
+                const mapa = {}
+
+                for (const favorito of favoritos) {
+                    mapa[favorito.cinema_id] = favorito.id
+                }
+
+                set_favoritos_por_cinema(mapa)
+            })
+            .catch(() => set_favoritos_por_cinema({}))
+
+    }, [])
+
+    const alternar_favorito = async (cinema_id) => {
+
+        if (favorito_carregando === cinema_id) return
+
+        set_favorito_carregando(cinema_id)
+
+        const cinema_id_numero = Number(cinema_id)
+        const favorito_id = favoritos_por_cinema[cinema_id_numero]
+
+        try {
+
+            if (favorito_id) {
+
+                const response = await fetch(`/api/cinema-favorito/${favorito_id}`, {
+                    method: "DELETE",
+                })
+
+                if (!response.ok) {
+                    throw new Error("Erro ao remover favorito")
+                }
+
+                set_favoritos_por_cinema((anterior) => {
+
+                    const atualizado = { ...anterior }
+                    delete atualizado[cinema_id_numero]
+                    return atualizado
+                })
+
+            } else {
+
+                const response = await fetch("/api/cinema-favorito", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        usuario_id: USUARIO_ID,
+                        cinema_id: cinema_id_numero,
+                    }),
+                })
+
+                if (!response.ok) {
+                    throw new Error("Erro ao favoritar cinema")
+                }
+
+                const favorito = await response.json()
+
+                set_favoritos_por_cinema((anterior) => ({
+                    ...anterior,
+                    [cinema_id_numero]: favorito.id,
+                }))
+            }
+
+        } catch (erro) {
+            console.error(erro)
+        } finally {
+            set_favorito_carregando(null)
+        }
+    }
 
     const criar_janela_assentos = (sessao) => {
 
@@ -161,9 +240,26 @@ function Pagina_filmes() {
 
                                 <li key={cinema_index} className="cinema">
 
-                                    <h3 className="cinema-nome">cinema {sessao_por_cinema[Object.keys(sessao_por_cinema)[0]][0]["cinema_rel.nome"]}</h3>
+                                    <div className="cinema-cabecalho">
 
-                                    <h5 className="cinema-nome">rua placeholder {sessao_por_cinema[Object.keys(sessao_por_cinema)[0]][0]["cinema_rel.localizacao"]}</h5>
+                                        <div className="cinema-titulos">
+
+                                            <h3 className="cinema-nome">cinema {sessao_por_cinema[Object.keys(sessao_por_cinema)[0]][0]["cinema_rel.nome"]}</h3>
+
+                                            <h5 className="cinema-local">rua placeholder {sessao_por_cinema[Object.keys(sessao_por_cinema)[0]][0]["cinema_rel.localizacao"]}</h5>
+
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            className={`favorito-caixa ${favoritos_por_cinema[Number(cinema_index)] ? "favorito-caixa--ativo" : ""}`}
+                                            onClick={() => alternar_favorito(cinema_index)}
+                                            disabled={favorito_carregando === cinema_index}
+                                            aria-label={favoritos_por_cinema[Number(cinema_index)] ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                                            title={favoritos_por_cinema[Number(cinema_index)] ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                                        />
+
+                                    </div>
 
                                     <div className="salas">
 

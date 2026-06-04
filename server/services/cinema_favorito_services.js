@@ -38,8 +38,18 @@ async function deletar_cinema_favorito(cinema_favorito_id, opcoes = {}) {
 
 }
 
+async function listar_por_usuario_id(usuario_id, opcoes = {}) {
+
+  return cinema_favorito.findAll({
+    where: { usuario_id },
+    ...opcoes
+  })
+
+}
+
 module.exports = {
   criar_cinema_favorito,
   modificar_cinema_favorito,
   deletar_cinema_favorito,
+  listar_por_usuario_id,
 }
