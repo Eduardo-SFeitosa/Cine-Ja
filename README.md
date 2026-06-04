@@ -81,6 +81,7 @@ Tabelas utilizadas para armazenar os dados.
 - [assentos-db](#assentos-db)
 - [ingressos-db](#ingressos-db)
 - [pedidos-db](#pedidos-db)
+- [cinema-favorito-db](#cinema-favorito-db)
 
 # pagina-inicial
 Página principal do projeto que atua como home page.
