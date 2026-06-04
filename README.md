@@ -159,6 +159,7 @@ Armazena informações dos usuários da aplicação:
 **Relacionamentos:**
 - Um usuário pode ter vários ingressos (`hasMany` ingresso)
 - Um usuário pode ter vários pedidos (`hasMany` pedido)
+- Um usuário pode ter vários cinemas favoritos (`hasMany` cinema_favorito)
 
 # filmes-db
 Armazena todos os filmes do site:
@@ -188,6 +189,7 @@ Armazena os cinemas parceiros:
 **Relacionamentos:**
 - Um cinema pode ter várias sessões (`hasMany` sessoes)
 - Um cinema pode ter vários ingressos vendidos (`hasMany` ingresso)
+- Um cinema pode ter vários cinemas favoritos (`hasMany` cinema_favorito)
 
 # sessoes-disponiveis-db
 Conecta filmes e cinemas, formando as sessões:
@@ -243,3 +245,13 @@ Agrupa os ingressos de uma compra:
 **Relacionamentos:**
 - Um pedido pertence a um usuário (`belongsTo` usuarios)
 - Um pedido pode conter vários ingressos (`hasMany` ingresso)
+
+# cinema-favorito-db
+Armazena a relação entre usuários e seus cinemas favoritos:
+- `id` – identificador único
+- `usuario_id` – referência a [usuarios-db](#usuarios-db)
+- `cinema_id` – referência a [cinemas-db](#cinemas-db)
+
+**Relacionamentos:**
+- Um registro pertence a um usuário (`belongsTo` usuarios)
+- Um registro pertence a um cinema (`belongsTo` cinemas)
