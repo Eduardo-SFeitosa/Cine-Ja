@@ -236,7 +236,16 @@ function Pagina_filmes() {
 
                         <ul className="lista-cinemas">
 
-                            {Object.entries(sessoes).map(([cinema_index, sessao_por_cinema]) => 
+                            {Object.entries(sessoes)
+                                .sort(([cinemaIdA], [cinemaIdB]) => {
+                                    const aIsFavorite = Number(cinemaIdA) in favoritos_por_cinema;
+                                    const bIsFavorite = Number(cinemaIdB) in favoritos_por_cinema;
+                                    
+                                    if (aIsFavorite && !bIsFavorite) return -1;
+                                    if (!aIsFavorite && bIsFavorite) return 1;
+                                    return 0;
+                                })
+                                .map(([cinema_index, sessao_por_cinema]) => 
 
                                 <li key={cinema_index} className="cinema">
 
