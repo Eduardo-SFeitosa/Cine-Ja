@@ -269,6 +269,7 @@ function Pagina_filmes() {
 
                                         </div>
 
+                                        { usuario ? 
                                         <button
                                             type="button"
                                             className={`favorito-caixa ${favoritos_por_cinema[Number(cinema_index)] ? "favorito-caixa--ativo" : ""}`}
@@ -276,7 +277,9 @@ function Pagina_filmes() {
                                             disabled={favorito_carregando === cinema_index}
                                             aria-label={favoritos_por_cinema[Number(cinema_index)] ? "Remover dos favoritos" : "Adicionar aos favoritos"}
                                             title={usuario ? (favoritos_por_cinema[Number(cinema_index)] ? "Remover dos favoritos" : "Adicionar aos favoritos") : "Faça login para favoritar"}
-                                        />
+                                        />: null}
+
+                                        
 
                                     </div>
 
