@@ -8,8 +8,8 @@ import Pagina_inicio from './paginas/pagina_inicio.jsx'
 import Pagina_filmes from './paginas/pagina_filmes.jsx'
 
 import Pagina_usuario from './paginas/pagina_usuario.jsx'
-
 import Pagina_criar_conta from './paginas/pagina_criar_conta.jsx'
+import Pagina_login from './paginas/pagina_login.jsx'
 
 import {createBrowserRouter, RouterProvider} from "react-router-dom"
 
@@ -25,6 +25,9 @@ const rotas = createBrowserRouter([
 
   //pagina de criar conta como página completa
   {path:"/criar-conta", element: <Pagina_criar_conta/>},
+
+  //pagina de login de usuario
+  {path:"/login", element: <Pagina_login/>},
 
   //pagina de usuario único
   {path:"/usuario/:usuario_id", element: <Pagina_usuario/>}

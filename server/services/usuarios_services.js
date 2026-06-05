@@ -54,13 +54,21 @@ async function checar_usaurio_base(opcoes = {}) {
 
 async function autenticar_usuario(email, senha) {
 
-  const usuario = await usuarios.findOne({ where: { email } })
+  const usuario = await usuarios.findOne({
+    where: { email },
+    attributes: { include: ["senha"] },
+  })
 
   if (!usuario) return null
   
-  const senha_valida = await  bcrypt.compare(senha, usuario.senha)
+  const senha_valida = await bcrypt.compare(senha, usuario.senha)
 
-  return senha_valida ? usuario : null
+  if (!senha_valida) return null
+
+  const usuarioSeguro = usuario.toJSON()
+  delete usuarioSeguro.senha
+
+  return usuarioSeguro
 
 }
 

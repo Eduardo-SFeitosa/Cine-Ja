@@ -47,7 +47,7 @@ export default function Pagina_criar_conta() {
     setCarregando(true)
 
     try {
-      const response = await fetch("http://localhost:3000/usuarios", {
+      const response = await fetch("/api/usuarios", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

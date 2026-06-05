@@ -14,6 +14,23 @@ route.post("/", async (request, response) => {
   
 })
 
+//autentica usuario pelo email e senha
+route.post("/login", async (request, response) => {
+  const { email, senha } = request.body
+
+  if (!email || !senha) {
+    return response.status(400).json({ message: "Email e senha são obrigatórios" })
+  }
+
+  const usuario = await usuario_services.autenticar_usuario(email, senha)
+
+  if (!usuario) {
+    return response.status(401).json({ message: "Email ou senha inválidos" })
+  }
+
+  response.json(usuario)
+})
+
 //modifica senha e ou nome de usuario
 route.put("/:usuario_id", async (request, response) => {
 
