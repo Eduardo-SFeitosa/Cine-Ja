@@ -45,7 +45,7 @@ export default function Criar_conta() {
     setCarregando(true)
 
     try {
-      const response = await fetch("http://localhost:3000/usuarios", {
+      const response = await fetch("api/usuarios", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,6 +65,7 @@ export default function Criar_conta() {
 
       const dados = await response.json()
       setMensagem("Conta criada com sucesso!")
+      navigate('/login', { replace: true })
       setNomeUsuario("")
       setEmail("")
       setSenha("")

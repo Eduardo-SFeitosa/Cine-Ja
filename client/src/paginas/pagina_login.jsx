@@ -1,20 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import './pagina_login.css'
 import Cabecalho from '../componentes/cabecalho.jsx'
+import { salvarUsuarioLogado, obterUsuarioLogado } from '../utils/auth.js'
 
 export default function Pagina_login() {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
-  const [mensagem, setMensagem] = useState('')
+  const [mensagem, set_mensagem] = useState('')
   const [erro, setErro] = useState('')
-  const [carregando, setCarregando] = useState(false)
+  const [carregando, set_carregando] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const usuario = obterUsuarioLogado()
+    if (usuario) {
+      navigate(`/usuario/${usuario.id}`)
+    }
+  }, [navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setErro('')
-    setMensagem('')
+    set_mensagem('')
 
     if (!email.trim()) {
       setErro('Email é obrigatório')
@@ -25,7 +33,7 @@ export default function Pagina_login() {
       return
     }
 
-    setCarregando(true)
+    set_carregando(true)
 
     try {
       const response = await fetch('/api/usuarios/login', {
@@ -45,12 +53,17 @@ export default function Pagina_login() {
       }
 
       const usuario = await response.json()
-      setMensagem('Login realizado com sucesso!')
-      navigate(`/usuario/${usuario.id}`)
+      if (!usuario || !usuario.id) {
+        throw new Error('Resposta de login inválida')
+      }
+
+      salvarUsuarioLogado(usuario)
+      set_mensagem('Login realizado com sucesso!')
+      navigate('/', { replace: true })
     } catch (err) {
       setErro(err.message || 'Erro ao fazer login. Tente novamente.')
     } finally {
-      setCarregando(false)
+      set_carregando(false)
     }
   }
 

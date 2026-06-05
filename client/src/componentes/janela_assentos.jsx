@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./janela_assentos.css";
 
 import { Link } from "react-router-dom"
+import { obterUsuarioLogado } from '../utils/auth.js'
 
 function Janela_assentos({ sessao, horario, sala_numero, filme, fechar_janela }) {
 
@@ -101,9 +102,7 @@ function Janela_assentos({ sessao, horario, sala_numero, filme, fechar_janela })
           </button>
 
           <main className="assento-conteudo">
-
-            <Link to={"/usuario/1"}> Pagar agora </Link>
-
+            <Link to={obterUsuarioLogado() ? `/usuario/${obterUsuarioLogado().id}` : '/login'}> Pagar agora </Link>
           </main>
 
         </header>

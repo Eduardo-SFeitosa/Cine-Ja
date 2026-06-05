@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './pagina_filmes.css';
 import Cabecalho from '../componentes/cabecalho.jsx';
 import Janela_assentos from '../componentes/janela_assentos.jsx';
-
-const USUARIO_ID = 1;
+import { obterUsuarioLogado } from '../utils/auth.js';
 
 const organizar_sessoes_por_sala = (sessoes) => {
 
@@ -49,6 +48,8 @@ function Pagina_filmes() {
     const [sessoes, set_sessoes] = useState({})
     const [favoritos_por_cinema, set_favoritos_por_cinema] = useState({})
     const [favorito_carregando, set_favorito_carregando] = useState(null)
+    const [usuario, setUsuario] = useState(null)
+    const navigate = useNavigate()
 
     //coleta as informações do filme utilizando a id da url
     useEffect(() => {
@@ -86,24 +87,33 @@ function Pagina_filmes() {
     }, [])
 
     useEffect(() => {
+      const usuarioLogado = obterUsuarioLogado()
+      setUsuario(usuarioLogado)
 
-        fetch(`/api/cinema-favorito/usuario/${USUARIO_ID}`)
-            .then((response) => response.json())
-            .then((favoritos) => {
+      if (!usuarioLogado) {
+        set_favoritos_por_cinema({})
+        return
+      }
 
-                const mapa = {}
+      fetch(`/api/cinema-favorito/usuario/${usuarioLogado.id}`)
+        .then((response) => response.json())
+        .then((favoritos) => {
+          const mapa = {}
 
-                for (const favorito of favoritos) {
-                    mapa[favorito.cinema_id] = favorito.id
-                }
+          for (const favorito of favoritos) {
+            mapa[favorito.cinema_id] = favorito.id
+          }
 
-                set_favoritos_por_cinema(mapa)
-            })
-            .catch(() => set_favoritos_por_cinema({}))
-
+          set_favoritos_por_cinema(mapa)
+        })
+        .catch(() => set_favoritos_por_cinema({}))
     }, [])
 
     const alternar_favorito = async (cinema_id) => {
+        if (!usuario) {
+            navigate('/login')
+            return
+        }
 
         if (favorito_carregando === cinema_id) return
 
@@ -137,7 +147,7 @@ function Pagina_filmes() {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        usuario_id: USUARIO_ID,
+                        usuario_id: usuario.id,
                         cinema_id: cinema_id_numero,
                     }),
                 })
@@ -265,7 +275,7 @@ function Pagina_filmes() {
                                             onClick={() => alternar_favorito(cinema_index)}
                                             disabled={favorito_carregando === cinema_index}
                                             aria-label={favoritos_por_cinema[Number(cinema_index)] ? "Remover dos favoritos" : "Adicionar aos favoritos"}
-                                            title={favoritos_por_cinema[Number(cinema_index)] ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                                            title={usuario ? (favoritos_por_cinema[Number(cinema_index)] ? "Remover dos favoritos" : "Adicionar aos favoritos") : "Faça login para favoritar"}
                                         />
 
                                     </div>
